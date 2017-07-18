@@ -37,10 +37,12 @@ more fun with saving class object:
 ```
 int func(unsigned char val1, size_t &val2) {/*some actual work*/}
 
-class Dummy
+struct Dummy
 {
-   int mfunc(unsigned char val1, size_t &val2) {/*some actual class work*/}
-   static int sfunc(unsigned char val1, size_t &val2) {/*some actual static work*/}
+   int mfunc(unsigned char val1, size_t &val2) 
+      {/*some actual class work*/}
+   static int sfunc(unsigned char val1, size_t &val2) 
+      {/*some actual static work*/}
 };
 
 int gfunc(Dummy *pdummy, unsigned char val1, size_t &val2) {/*some actual class or global work*/}
