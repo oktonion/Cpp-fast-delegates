@@ -1059,6 +1059,357 @@ namespace delegates
 			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3, p4, p5, p6, p7, p8);
 		}
 	};
+
+	template < class X, class Y, class ReturnT >
+	delegate<ReturnT>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)())
+	{
+		return delegate<ReturnT>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT >
+	delegate<ReturnT>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)() const)
+	{
+		return delegate<ReturnT>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT >
+	delegate<ReturnT>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*))
+	{
+		return delegate<ReturnT>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT >
+	delegate<ReturnT>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*))
+	{
+		return delegate<ReturnT>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT >
+	delegate<ReturnT>
+		bind(ReturnT(*function_to_bind)())
+	{
+		return delegate<ReturnT>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T >
+	delegate<ReturnT, Param1T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T))
+	{
+		return delegate<ReturnT, Param1T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T >
+	delegate<ReturnT, Param1T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T) const)
+	{
+		return delegate<ReturnT, Param1T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T >
+	delegate<ReturnT, Param1T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T))
+	{
+		return delegate<ReturnT, Param1T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T >
+	delegate<ReturnT, Param1T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T))
+	{
+		return delegate<ReturnT, Param1T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T >
+	delegate<ReturnT, Param1T>
+		bind(ReturnT(*function_to_bind)(Param1T))
+	{
+		return delegate<ReturnT, Param1T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T >
+	delegate<ReturnT, Param1T, Param2T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T))
+	{
+		return delegate<ReturnT, Param1T, Param2T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T >
+	delegate<ReturnT, Param1T, Param2T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T >
+	delegate<ReturnT, Param1T, Param2T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T))
+	{
+		return delegate<ReturnT, Param1T, Param2T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T >
+	delegate<ReturnT, Param1T, Param2T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T))
+	{
+		return delegate<ReturnT, Param1T, Param2T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T >
+	delegate<ReturnT, Param1T, Param2T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T))
+	{
+		return delegate<ReturnT, Param1T, Param2T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T >
+	delegate<ReturnT, Param1T, Param2T, Param3T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T >
+	delegate<ReturnT, Param1T, Param2T, Param3T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T >
+	delegate<ReturnT, Param1T, Param2T, Param3T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T >
+	delegate<ReturnT, Param1T, Param2T, Param3T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T, class Param3T >
+	delegate<ReturnT, Param1T, Param2T, Param3T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T>(function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T, class Param8T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>
+		bind(Y * pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>(pthis, function_to_bind);
+	}
+
+	template < class X, class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T, class Param8T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>
+		bind(const Y *pthis,
+			ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const)
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T, class Param8T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>(pthis, function_to_bind);
+	}
+
+	template < class Y, class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T, class Param8T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>
+		bind(Y *pthis,
+			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>(pthis, function_to_bind);
+	}
+
+	template < class ReturnT, class Param1T, class Param2T, class Param3T, class Param4T, class Param5T, class Param6T, class Param7T, class Param8T >
+	delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>
+		bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
+	{
+		return delegate<ReturnT, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T>(function_to_bind);
+	}
 }
 
 
