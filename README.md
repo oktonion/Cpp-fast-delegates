@@ -21,7 +21,7 @@ using namespace delegates;
 then:
 
 ```
-int func(unsigned char val1, size_t &val2) {/*some actual work*/}
+int func(unsigned char val1, size_t &val2) {/*some actual work*/ return 0;}
 
 ...
 
@@ -35,18 +35,17 @@ int t = d2(2, val); // calling 'func' by delegate
 more fun with saving class object:
 
 ```
-int func(unsigned char val1, size_t &val2) {/*some actual work*/}
+int func(unsigned char val1, size_t &val2) {/*some actual work*/ return 0;}
 
 struct Dummy
 {
-   int mfunc(unsigned char val1, size_t &val2) 
-      {/*some actual class work*/}
-   static int sfunc(unsigned char val1, size_t &val2) 
-      {/*some actual static work*/}
+   int mfunc(unsigned char val1, size_t &val2) {/*some actual class work*/ return 0;}
+      
+   static int sfunc(unsigned char val1, size_t &val2) {/*some actual static work*/ return 0;}
 };
 
-int gfunc(Dummy *pdummy, unsigned char val1, size_t &val2) {/*some actual class or global work*/}
-int const_gfunc(const Dummy *pdummy, unsigned char val1, size_t &val2) {/*some actual class or global work*/}
+int gfunc(Dummy *pdummy, unsigned char val1, size_t &val2) {/*some actual class or global work*/ return 0;}
+int const_gfunc(const Dummy *pdummy, unsigned char val1, size_t &val2) {/*some actual class or global work*/ return 0;}
 
 ...
 
@@ -74,7 +73,7 @@ t = d2(2, val); // calling 'const_gfunc' by delegate with const pointer to 'dumm
 also you could use 'bind' to create delegate:
 
 ```
-int func(unsigned char val1, size_t &val2) {/*some actual work*/}
+int func(unsigned char val1, size_t &val2) {/*some actual work*/ return 0;}
 
 ...
 
