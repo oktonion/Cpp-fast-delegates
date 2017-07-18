@@ -58,7 +58,7 @@ d2.bind(&dummy, &gfunc); // binding to specific object but global function takin
 t = d2(2, val); // calling 'gfunc' by delegate with pointer to 'dummy' as first argument
 
 d2.bind(&dummy, &const_gfunc); // binding to specific object but const global function taking 'object_type'
-t = d2(2, val); // calling 'gfunc' by delegate with const pointer to 'dummy' as first argument
+t = d2(2, val); // calling 'const_gfunc' by delegate with const pointer to 'dummy' as first argument
 ```
 
 also you could use 'bind' to create delegate:
