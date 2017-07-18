@@ -2,6 +2,14 @@
 
 Extended fast delegates (used Don Clugston original delegates).
 
+In this delegates you could store:
+1) global function
+2) global function with class object (both const obj and non-const)
+3) static function of class (same as two above actually)
+4) member function of class with class object (both const obj and non-const)
+
+Calls to functions stored are extremely fast (like call to original function). Delegate takes minimum memory, are crossplatform and C++98, C++11, C++14 and later standart compatible.
+
 How to use:
 ```
 #include "include\delegate.h"
