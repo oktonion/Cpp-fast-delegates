@@ -12,7 +12,7 @@ Calls to functions stored are extremely fast (like call to original function). D
 
 How to use:
 ```
-#include "include\delegate.h"
+#include "delegates\delegate.h"
 
 ...
 
