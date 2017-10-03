@@ -31,7 +31,10 @@ int func(const SomeOtherClass*, std::string, size_t&);
 ```
 and there is one delegate to rule them all:
 ```
-delegate<int, std::string, size_t&> allmighty_delegate;//could contain any of functions above (with class pointer if needed)
+// could contain any of functions above (with class pointer if needed):
+
+delegate<int, std::string, size_t&> allmighty_delegate;
+
 ```
 
 # How to use:
