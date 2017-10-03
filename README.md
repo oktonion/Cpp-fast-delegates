@@ -10,7 +10,31 @@ In this delegates you could store:
 
 Calls to functions stored are extremely fast (like call to original function). Delegate takes minimum memory, are crossplatform and C++98, C++11, C++14 and later standart compatible.
 
-How to use:
+# What are we talking about?
+f.e. we have some functions (class functions, global functions, constant or not, whatever...) with same arguments and return value:
+```
+int func(std::string, size_t&);
+
+int SomeClass::mfunc(std::string, size_t&);
+int SomeClass::mcfunc(std::string, size_t&) const;
+static int SomeClass::sfunc(std::string, size_t&);
+int func(SomeClass*, std::string, size_t&);
+int func(const SomeClass*, std::string, size_t&);
+
+int SomeOtherClass::mfunc(std::string, size_t&);
+int SomeOtherClass::mcfunc(std::string, size_t&) const;
+static int SomeOtherClass::sfunc(std::string, size_t&);
+int func(SomeOtherClass*, std::string, size_t&);
+int func(const SomeOtherClass*, std::string, size_t&);
+
+// any other class actually...
+```
+and there is one delegate to rule them all:
+```
+delegate<int, std::string, size_t&> allmighty_delegate;//could contain any of functions above (with class pointer if needed)
+```
+
+# How to use:
 ```
 #include "delegates\delegate.h"
 
