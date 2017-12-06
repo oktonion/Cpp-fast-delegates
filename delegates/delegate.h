@@ -1,6 +1,4 @@
 
-#include "FastDelegate.h"
-
 #ifndef DELEGATE_H
 #define DELEGATE_H
 #if _MSC_VER > 1000
@@ -21,6 +19,8 @@
 /*   5) { const this_type pthis, return_type this_type::member_function const (param_type1 param1, param_type2 param2); }     */
 /*                                                                                                                            */
 /******************************************************************************************************************************/
+
+#include "FastDelegate.h"
 
 namespace delegates
 {
