@@ -124,7 +124,21 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)()) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)() const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)()) {
+			base_type::bind(function_to_bind);
+		}
+
+
 
 	private:
 		union
@@ -237,7 +251,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -350,7 +376,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -463,7 +501,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -576,7 +626,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -689,7 +751,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -802,7 +876,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -915,7 +1001,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
@@ -1028,7 +1126,19 @@ namespace delegates
 			bind(this, &delegate::f_proxy_const<Y>);
 		}
 
-		using base_type::bind;
+		template < class X, class Y >
+		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T)) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		template < class X, class Y >
+		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const) {
+			base_type::bind(pthis, function_to_bind);
+		}
+
+		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T)) {
+			base_type::bind(function_to_bind);
+		}
 
 	private:
 		union
