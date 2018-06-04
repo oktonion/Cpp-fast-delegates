@@ -291,7 +291,7 @@ struct SimplifyMemFunc {
 	inline static GenericClass *Convert(X *pthis, XFuncType function_to_bind, 
 		GenericMemFuncType &bound_func) { 
 		// Unsupported member function type -- force a compile failure.
-	    // (it's illegal to have a array with negative size).
+		// (it's illegal to have a array with negative size).
 		typedef char ERROR_Unsupported_member_function_pointer_on_this_compiler[N-100];
 		return 0; 
 	}
@@ -310,9 +310,9 @@ struct SimplifyMemFunc<SINGLE_MEMFUNCPTR_SIZE>  {
 		// static_cast through an int, but the DOS compiler doesn't.
 		bound_func = horrible_cast<GenericMemFuncType>(function_to_bind);
 #else 
-        bound_func = reinterpret_cast<GenericMemFuncType>(function_to_bind);
+		bound_func = reinterpret_cast<GenericMemFuncType>(function_to_bind);
 #endif
-        return reinterpret_cast<GenericClass *>(pthis);
+		return reinterpret_cast<GenericClass *>(pthis);
 	}
 };
 
@@ -341,16 +341,16 @@ struct SimplifyMemFunc< SINGLE_MEMFUNCPTR_SIZE + sizeof(int) >  {
 		GenericMemFuncType &bound_func) { 
 		// We need to use a horrible_cast to do this conversion.
 		// In MSVC, a multiple inheritance member pointer is internally defined as:
-        union {
+		union {
 			XFuncType func;
 			struct {	 
 				GenericMemFuncType funcaddress; // points to the actual member function
 				int delta;	     // #BYTES to be added to the 'this' pointer
 			}s;
-        } u;
+		} u;
 		// Check that the horrible_cast will work
 		typedef int ERROR_CantUsehorrible_cast[sizeof(function_to_bind)==sizeof(u.s)? 1 : -1];
-        u.func = function_to_bind;
+		u.func = function_to_bind;
 		bound_func = u.s.funcaddress;
 		return reinterpret_cast<GenericClass *>(reinterpret_cast<char *>(pthis) + u.s.delta); 
 	}
@@ -499,8 +499,8 @@ struct SimplifyMemFunc<SINGLE_MEMFUNCPTR_SIZE + 3*sizeof(int) >
 				reinterpret_cast<const char *>(vtable) + u.s.vtable_index);
 		}
 		// The int at 'virtual_delta' gives us the amount to add to 'this'.
-        // Finally we can add the three components together. Phew!
-        return reinterpret_cast<GenericClass *>(
+		// Finally we can add the three components together. Phew!
+		return reinterpret_cast<GenericClass *>(
 			reinterpret_cast<char *>(pthis) + u.s.delta + virtual_delta);
 	};
 };
@@ -582,7 +582,7 @@ public:
 public:
 #if !defined(FASTDELEGATE_USESTATICFUNCTIONHACK)
 	inline bool IsEqual (const DelegateMemento &x) const{
-	    // We have to cope with the static function pointers as a special case
+		// We have to cope with the static function pointers as a special case
 		if (m_pFunction!=x.m_pFunction) return false;
 		// the static function ptrs must either both be equal, or both be 0.
 		if (m_pStaticFunction!=x.m_pStaticFunction) return false;
@@ -737,7 +737,7 @@ public:
 			m_pFunction=0;
 		} else { 
 			bindmemfunc(pParent, static_function_invoker);
-        }
+		}
 		m_pStaticFunction=reinterpret_cast<GenericFuncPtr>(function_to_bind);
 	}
 	inline UnvoidStaticFuncPtr GetStaticFunction() const { 
@@ -772,7 +772,7 @@ public:
 		   // We'll be ignoring the 'this' pointer, but we need to make sure we pass
 		   // a valid value to bindmemfunc().
 			bindmemfunc(pParent, static_function_invoker);
-        }
+		}
 
 		// WARNING! Evil hack. We store the function in the 'this' pointer!
 		// Ensure that there's a compilation failure if function pointers 
@@ -910,11 +910,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -995,11 +995,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1080,11 +1080,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1165,11 +1165,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1250,11 +1250,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1335,11 +1335,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1420,11 +1420,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1505,11 +1505,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1590,11 +1590,11 @@ private:
 		int a_data_pointer_to_this_is_0_on_buggy_compilers;
 		StaticFunctionPtr m_nonzero;
 	} UselessTypedef;
-    typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
+	typedef StaticFunctionPtr SafeBoolStruct::*unspecified_bool_type;
 public:
 	operator unspecified_bool_type() const {
-        return empty()? 0: &SafeBoolStruct::m_nonzero;
-    }
+		return empty()? 0: &SafeBoolStruct::m_nonzero;
+	}
 	// necessary to allow ==0 to work despite the safe_bool idiom
 	inline bool operator==(StaticFunctionPtr funcptr) {
 		return m_Closure.IsEqualToStaticFuncPtr(funcptr);	}
@@ -1655,17 +1655,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)(  ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)(  ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)(  ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)(  ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)(  ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1692,17 +1692,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1729,17 +1729,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1766,17 +1766,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2, Param3 p3 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1803,17 +1803,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1840,17 +1840,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1877,17 +1877,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1914,17 +1914,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
@@ -1951,17 +1951,17 @@ public:
 
   template < class X, class Y >
   FastDelegate(Y * pthis, 
-    R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8 ))
-    : BaseType(pthis, function_to_bind)  { }
+	R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8 ))
+	: BaseType(pthis, function_to_bind)  { }
 
   template < class X, class Y >
   FastDelegate(const Y *pthis,
-      R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8 ) const)
-    : BaseType(pthis, function_to_bind)
+	  R (X::* function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8 ) const)
+	: BaseType(pthis, function_to_bind)
   {  }
 
   FastDelegate(R (*function_to_bind)( Param1 p1, Param2 p2, Param3 p3, Param4 p4, Param5 p5, Param6 p6, Param7 p7, Param8 p8 ))
-    : BaseType(function_to_bind)  { }
+	: BaseType(function_to_bind)  { }
   void operator = (const BaseType &x)  {	  
 		*static_cast<BaseType*>(this) = x; }
 };
