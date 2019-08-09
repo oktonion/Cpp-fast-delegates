@@ -2,6 +2,8 @@
 
 Extended fast delegates (used Don Clugston original delegates).
 
+[![codecov](https://codecov.io/gh/oktonion/Cpp-fast-delegates/branch/tests/graph/badge.svg)](https://codecov.io/gh/oktonion/Cpp-fast-delegates)
+
 In this delegates you could store:
 1) global function
 2) global function with class object (both const obj and non-const)
