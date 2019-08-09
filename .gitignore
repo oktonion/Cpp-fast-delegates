@@ -1,0 +1,126 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+# =========================
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+src/.vscode/.browse.VC.db
+src/.vscode/.BROWSE.VC.DB-shm
+src/.vscode/launch.json
+*.DB-wal
+
+# Visual Studio Code files
+*.vscode*
+
+# Visual Studio files
+*.vs*
+
+# old library
+/old/*
+/slib/*
+*.tar
+
+# cppcheck files
+*.a1
+*.cppcheck
+PhWidgets-cppcheck-build-dir/*
+
+# tests binaries
+/tests/bin/*
+
+# fuse
+*.fuse_*
+CppProperties.json
+
+
+cvs
+
+*~
+*.bak
+*.o
+*.a
+*.lo
+*.la
+*.user
+*.suo
+*.sdf
+*.opensdf
+
+bin/
+obj/
+ipch/
+
+*.obj
