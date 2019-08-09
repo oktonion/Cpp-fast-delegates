@@ -21,4 +21,11 @@ TEST_CASE("Testing cpp delegate 0") {
 		
 		CHECK(!d0);
 	}
+
+	SUBCASE("Delegate copy construction")
+	{
+		delegate<void> d0 = delegate<void>(&void_func);
+
+		CHECK(d0);
+	}
 }
