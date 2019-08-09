@@ -2,7 +2,7 @@
 
 Extended fast delegates (used Don Clugston original delegates).
 
-[![travisci](https://api.travis-ci.org/oktonion/Cpp-fast-delegates.svg?branch=master)](https://travis-ci.org/oktonion/Cpp-fast-delegates)
+[![travisci](https://api.travis-ci.org/oktonion/Cpp-fast-delegates.svg?branch=tests)](https://travis-ci.org/oktonion/Cpp-fast-delegates)
 [![codecov](https://codecov.io/gh/oktonion/Cpp-fast-delegates/branch/tests/graph/badge.svg)](https://codecov.io/gh/oktonion/Cpp-fast-delegates)
 
 In this delegates you could store:
