@@ -25,17 +25,9 @@ install:
     git submodule update --recursive
 build_script:
 - cmd: >-
-    cd stdex
-
-    build_lib.bat
-
-    cd ..
-
     build_tests.bat
 test_script:
 - cmd: run_tests.bat
 artifacts:
-- path: .\stdex\lib
-  name: static library
-- path: .\stdex\include
-  name: library headers
+- path: .\delegates
+  name: library
