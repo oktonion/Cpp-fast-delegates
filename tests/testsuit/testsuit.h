@@ -6,4 +6,7 @@
     #include "./doctest.h"
 #endif // DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
+
+void void_func() {}
+
 #endif // DELEAGATES_TESTSUIT_H
