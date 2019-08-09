@@ -113,7 +113,7 @@ matrix:
       - RUN_SCRIPT=run_tests.bat
       script:
       - echo "script started"
-      - cd ./stdex
+      - cd ./delegates
       - echo "call \"C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\vsvars32.bat\"" > ~$BUILD_LIB_SCRIPT
       - cat $BUILD_LIB_SCRIPT >> ~$BUILD_LIB_SCRIPT
       - chmod +x ./~$BUILD_LIB_SCRIPT
@@ -134,7 +134,7 @@ matrix:
       script:
         #call "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat" &&
       - echo "script started"
-      - cd ./stdex
+      - cd ./delegates
       - echo "call \"C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars64.bat\"" > ~$BUILD_LIB_SCRIPT
       - cat $BUILD_LIB_SCRIPT >> ~$BUILD_LIB_SCRIPT
       - chmod +x ./~$BUILD_LIB_SCRIPT
@@ -149,7 +149,7 @@ matrix:
 
 script:
   - echo "script started"
-  - cd ./stdex
+  - cd ./delegates
   - chmod +x $BUILD_LIB_SCRIPT
   - $BUILD_LIB_SCRIPT
   - cd ..
