@@ -4,7 +4,7 @@ mkdir .\tests\obj
 setlocal enabledelayedexpansion
 
 set "build_ok=1"
-set INCLUDE=%INCLUDE%;%cd%\pthread\;
+set INCLUDE=%INCLUDE%
 
 for /f %%f in ('dir /b ".\tests\*.cpp"') do (
   echo "compiling test %VisualStudioVersion% %%~nf"
@@ -14,7 +14,7 @@ for /f %%f in ('dir /b ".\tests\*.cpp"') do (
   )
 
   if "%build_ok%"=="1" (
-    cl /I .\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -Fe.\tests\bin\%%~nf.exe
+    cl .\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -Fe.\tests\bin\%%~nf.exe
     IF ERRORLEVEL 1 (
       set "build_ok=0"
     )
