@@ -49,17 +49,19 @@ namespace delegates
 	{
 		typedef ReturnT(*free_function_like_member_t)(void* );
 		typedef ReturnT(*free_function_like_member_const_t)(const void* );
+        
+        typedef ReturnT(delegate::* f_proxy_type)() const;
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -166,7 +168,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy() 
+		ReturnT f_proxy() const 
 		{ 
 			typedef ReturnT(*type_free_function_like_member_t)(Y* );
 
@@ -174,7 +176,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const() 
+		ReturnT f_proxy_const() const 
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y* );
 
@@ -189,16 +191,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -303,7 +307,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1)
+		ReturnT f_proxy(Param1T p1) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T);
 
@@ -311,7 +315,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1)
+		ReturnT f_proxy_const(Param1T p1) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T);
 
@@ -326,16 +330,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -440,7 +446,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2)
+		ReturnT f_proxy(Param1T p1, Param2T p2) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T);
 
@@ -448,7 +454,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T);
 
@@ -463,16 +469,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -577,7 +585,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3)
+		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T, Param3T);
 
@@ -585,7 +593,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T);
 
@@ -600,16 +608,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -714,7 +724,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4)
+		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T, Param3T, Param4T);
 
@@ -722,7 +732,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T);
 
@@ -737,16 +747,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T, Param5T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T, Param5T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -851,7 +863,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5)
+		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T);
 
@@ -859,7 +871,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T);
 
@@ -874,16 +886,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -988,7 +1002,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6)
+		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T);
 
@@ -996,7 +1010,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T);
 
@@ -1011,16 +1025,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -1125,7 +1141,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7)
+		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
 
@@ -1133,7 +1149,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
 
@@ -1148,16 +1164,18 @@ namespace delegates
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T);
 		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T);
 
+		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const;
+
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type get_proxy(Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
         template<class Y>
-        ReturnT delegate::* get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
+        f_proxy_type get_proxy(const Y*, ReturnT(*)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) const
         { return &delegate::f_proxy_const<Y>; }
 
 	public:
@@ -1262,7 +1280,7 @@ namespace delegates
 		};
 
 		template< class Y >
-		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8)
+		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T);
 
@@ -1270,7 +1288,7 @@ namespace delegates
 		}
 
 		template< class Y >
-		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8)
+		ReturnT f_proxy_const(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8) const
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T);
 
