@@ -44,5 +44,8 @@ TEST_CASE("Testing cpp delegate 1") {
         int *iptr;
 
         d1 = delegate<void, int>(vptr, &void_func_void_p_int);
+
+
+		delegate<void, int> dd1(d1);
 	}
 }
