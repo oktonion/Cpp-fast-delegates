@@ -29,9 +29,9 @@ TEST_CASE("Testing cpp delegate 1") {
 
 	SUBCASE("Delegate 1 in-place construction")
 	{
-        delegate<void, int> d1(0);
+        delegate<void, int> d1(&void_func_int);
 		
-		CHECK(!d1);
+		CHECK(d1);
 	}
 
 	SUBCASE("Delegate 1 copy construction")
