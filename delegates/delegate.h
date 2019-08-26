@@ -268,6 +268,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)()) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -275,12 +276,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)() const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)()) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -505,6 +507,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -512,12 +515,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -741,6 +745,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -748,12 +753,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -977,6 +983,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -984,12 +991,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -1213,6 +1221,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -1220,12 +1229,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -1449,6 +1459,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -1456,12 +1467,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -1685,6 +1697,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -1692,12 +1705,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -1921,6 +1935,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -1928,12 +1943,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
@@ -2157,6 +2173,7 @@ namespace delegates
 		inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T)) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
@@ -2164,12 +2181,13 @@ namespace delegates
 		inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T) const) {
 			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(pthis, function_to_bind);
 		}
 
 		inline void bind(ReturnT(*function_to_bind)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T)) {
-			assert(NULL != pthis);
 			assert(NULL != function_to_bind);
+			m_pthis = NULL; m_free_func = NULL;
 			base_type::bind(function_to_bind);
 		}
 
