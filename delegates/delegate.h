@@ -83,7 +83,6 @@ namespace delegates
 		public fastdelegate::FastDelegate0<ReturnT>
 	{
 		typedef ReturnT(*free_function_like_member_t)(void* );
-		typedef ReturnT(*free_function_like_member_const_t)(const void* );
         
         typedef ReturnT(delegate::* f_proxy_type)() const;
 
@@ -147,16 +146,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y* ))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -174,15 +173,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -191,15 +188,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		bool operator==(const delegate &other) const 
@@ -251,16 +246,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y* )) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -288,17 +283,8 @@ namespace delegates
 
 	private:
 
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy() const 
@@ -313,7 +299,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y* );
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const));
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis));
 		}
 	};
 
@@ -322,7 +308,6 @@ namespace delegates
 		public fastdelegate::FastDelegate1<Param1T, ReturnT>
 	{
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T);
-		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T);
 
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T) const;
 
@@ -386,16 +371,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -413,15 +398,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -430,15 +413,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -490,16 +471,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -526,17 +507,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1) const
@@ -551,7 +523,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1);
 		}
 	};
 
@@ -624,16 +596,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -651,15 +623,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -668,15 +638,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -728,16 +696,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -764,17 +732,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2) const
@@ -789,7 +748,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2);
 		}
 	};
 
@@ -798,7 +757,6 @@ namespace delegates
 		public fastdelegate::FastDelegate3<Param1T, Param2T, Param3T, ReturnT>
 	{
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T);
-		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T);
 
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T) const;
 
@@ -862,16 +820,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -889,15 +847,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -906,15 +862,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -966,16 +920,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -1002,17 +956,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3) const
@@ -1027,7 +972,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2, p3);
 		}
 	};
 
@@ -1036,7 +981,6 @@ namespace delegates
 		public fastdelegate::FastDelegate4<Param1T, Param2T, Param3T, Param4T, ReturnT>
 	{
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T);
-		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T);
 
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T) const;
 
@@ -1100,16 +1044,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -1127,15 +1071,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -1144,15 +1086,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -1204,16 +1144,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -1240,17 +1180,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4) const
@@ -1265,7 +1196,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3, p4);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2, p3, p4);
 		}
 	};
 
@@ -1274,7 +1205,6 @@ namespace delegates
 		public fastdelegate::FastDelegate5<Param1T, Param2T, Param3T, Param4T, Param5T, ReturnT>
 	{
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T, Param5T);
-		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T, Param5T);
 
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T) const;
 
@@ -1338,16 +1268,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -1371,9 +1301,7 @@ namespace delegates
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -1388,9 +1316,7 @@ namespace delegates
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -1442,16 +1368,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -1478,17 +1404,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5) const
@@ -1503,7 +1420,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3, p4, p5);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2, p3, p4, p5);
 		}
 	};
 
@@ -1576,16 +1493,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -1603,15 +1520,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -1620,15 +1535,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -1680,16 +1593,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -1716,17 +1629,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6) const
@@ -1741,7 +1645,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3, p4, p5, p6);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2, p3, p4, p5, p6);
 		}
 	};
 
@@ -1750,7 +1654,6 @@ namespace delegates
 		public fastdelegate::FastDelegate7<Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, ReturnT>
 	{
 		typedef ReturnT(*free_function_like_member_t)(void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
-		typedef ReturnT(*free_function_like_member_const_t)(const void*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
 
 		typedef ReturnT(delegate::* f_proxy_type)(Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T) const;
 
@@ -1814,16 +1717,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -1841,15 +1744,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -1858,15 +1759,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -1918,16 +1817,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -1954,17 +1853,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7) const
@@ -1979,7 +1869,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3, p4, p5, p6, p7);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2, p3, p4, p5, p6, p7);
 		}
 	};
 
@@ -2052,16 +1942,16 @@ namespace delegates
 		delegate(Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 		template < class Y >
 		delegate(const Y *pthis,
 			ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T))
 			: base_type(this, get_proxy(pthis, function_to_bind)),
-			m_pthis_const(static_cast<const void*>(pthis)),
-			m_free_func_const(reinterpret_cast<free_function_like_member_const_t>(function_to_bind))
+			m_pthis(static_cast<void*>(pthis)),
+			m_free_func(reinterpret_cast<free_function_like_member_t>(function_to_bind))
 		{ }
 
 
@@ -2079,15 +1969,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 
 		void operator=(const delegate &other)
@@ -2096,15 +1984,13 @@ namespace delegates
 				f_proxy_type proxy = &delegate::f_proxy<delegate>;
 				base_type::bind(this, proxy);
 				fastdelegate::DelegateMemento tmp = (base_type(other)).GetMemento();
-				if(other.m_free_func || other.m_free_func_const)
+				if(other.m_free_func)
 					detail::DelegateMementoHack::copy_pthis(tmp, base_type::GetMemento());
 				base_type::SetMemento(tmp);
 			}
 			using namespace std;
 			memcpy(&m_pthis, &other.m_pthis, sizeof(m_pthis));
-			memcpy(&m_pthis_const, &other.m_pthis_const, sizeof(m_pthis_const));
 			memcpy(&m_free_func, &other.m_free_func, sizeof(m_free_func));
-			memcpy(&m_free_func_const, &other.m_free_func_const, sizeof(m_free_func_const));
 		}
 		
 		bool operator==(const delegate &other) const 
@@ -2156,16 +2042,16 @@ namespace delegates
 		template < class Y >
 		inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
 		template < class Y >
 		inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T)) {
 			this->clear();
-			m_pthis_const = static_cast<const void*>(pthis);
-			m_free_func_const = reinterpret_cast<free_function_like_member_const_t>(function_to_bind);
+			m_pthis = static_cast<void*>(pthis);
+			m_free_func = reinterpret_cast<free_function_like_member_t>(function_to_bind);
 			bind(this, get_proxy(pthis, function_to_bind));
 		}
 
@@ -2192,17 +2078,8 @@ namespace delegates
 		}
 
 	private:
-		union
-		{
-			const void *m_pthis_const;
-			void *m_pthis;
-		};
-
-		union
-		{
-			free_function_like_member_t m_free_func;
-			free_function_like_member_const_t m_free_func_const;
-		};
+		void *m_pthis;
+		free_function_like_member_t m_free_func;
 
 		template< class Y >
 		ReturnT f_proxy(Param1T p1, Param2T p2, Param3T p3, Param4T p4, Param5T p5, Param6T p6, Param7T p7, Param8T p8) const
@@ -2217,7 +2094,7 @@ namespace delegates
 		{
 			typedef ReturnT(*type_free_function_like_member_t)(const Y*, Param1T, Param2T, Param3T, Param4T, Param5T, Param6T, Param7T, Param8T);
 
-			return reinterpret_cast<type_free_function_like_member_t>(m_free_func_const)(static_cast<const Y*>(m_pthis_const), p1, p2, p3, p4, p5, p6, p7, p8);
+			return reinterpret_cast<type_free_function_like_member_t>(m_free_func)(static_cast<const Y*>(m_pthis), p1, p2, p3, p4, p5, p6, p7, p8);
 		}
 	};
 
