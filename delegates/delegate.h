@@ -2451,4 +2451,4 @@ namespace delegates
 }
 
 
-#endif
+#endif // DELEGATE_H
