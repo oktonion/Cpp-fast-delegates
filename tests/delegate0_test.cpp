@@ -3,6 +3,10 @@
 #include "..//delegates/delegate.h"
 
 
+
+
+static void void_func() {}
+
 TEST_CASE("Testing cpp delegate 0") {
 	
 	using delegates::delegate;
