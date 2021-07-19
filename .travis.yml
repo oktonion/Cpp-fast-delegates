@@ -83,6 +83,8 @@ matrix:
       - CODE_COVERAGE_FLAGS=--coverage -fprofile-arcs -ftest-coverage
       - BUILD_SCRIPT="./build_tests.sh"
       - RUN_SCRIPT="./run_tests.sh"
+      ignore:
+      - "*/tests/*"  # ignore folders and all its contents
       after_success:
       - sudo pip install --upgrade pyOpenSSL
       - sudo pip install codecov
