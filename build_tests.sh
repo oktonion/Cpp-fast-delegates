@@ -55,7 +55,7 @@ for file in ./tests/*.cpp; do
   filename="${filename%.*}"
   echo "$(date): compiling test c++98 $filename"
   
-  output=$(($COMPILER -std=c++98 -pedantic $exclude_warn $CODE_COVERAGE_FLAGS $file $build_libs $CODE_COVERAGE_LIBS -o "./tests/bin/$filename") 2>&1)
+  output=$(($COMPILER -std=c++98 -pedantic $exclude_warn $CODE_COVERAGE_FLAGS $file $build_libs $CODE_COVERAGE_LIBS -DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN -o "./tests/bin/$filename") 2>&1)
 
   if [[ $? -ne 0 ]]; then
     if [[ $filename == *"fail"* ]]; then
