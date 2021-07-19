@@ -3,9 +3,13 @@
 #include "..//delegates/delegate.h"
 
 
+bool func_called = false;
 
-
-static void void_func() {}
+static void void_func() {func_called = true;}
+void void_func_void_p(void*)
+{
+    func_called = true;
+}
 
 TEST_CASE("Testing cpp delegate 0") {
 	
@@ -31,5 +35,26 @@ TEST_CASE("Testing cpp delegate 0") {
 		delegate<void> d0 = delegate<void>(&void_func);
 
 		CHECK(d0);
+	}
+
+	SUBCASE("Delegate 0 free func invocation")
+	{
+        delegate<void> d0;
+		d0 = delegate<void>(&void_func);
+
+		func_called = false;
+		d0();
+		CHECK(true == func_called);
+
+        void *vptr = 0;
+        int *iptr;
+
+        d0 = delegate<void>(vptr, &void_func_void_p);
+
+		func_called = false;
+		d0();
+		CHECK(true == func_called);
+
+		func_called = false;
 	}
 }
