@@ -23,9 +23,9 @@ for /f %%f in ('dir /b ".\tests\*.cpp"') do (
   set "origin_str=%%~nf"
   set "replaced_str=!origin_str:fail=!"
   if "!origin_str!"=="!replaced_str!" (
-    cl -nologo -EHsc -W4 -Fo.\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -c ".\tests\%%f"
+    cl -nologo -EHsc -W4 -Fo.\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -D DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN -c ".\tests\%%f"
   ) else (
-    cl -nologo -EHsc -W4 -Fo.\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -c ".\tests\%%f" >nul 2>&1
+    cl -nologo -EHsc -W4 -Fo.\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -D DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN -c ".\tests\%%f" >nul 2>&1
   )
   if not !errorlevel!==0 (
     set has_compile_error=!true!
@@ -55,7 +55,7 @@ for /f %%f in ('dir /b ".\tests\*.cpp"') do (
   )
   
   if !current_test_is_ok!==!true! if !has_compile_error!==!false! (
-    cl -nologo .\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -Fe.\tests\bin\%%~nf.exe
+    cl -nologo .\tests\obj\%%~nf.obj -D _CRT_SECURE_NO_WARNINGS -D DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN -Fe.\tests\bin\%%~nf.exe
     if not !errorlevel!==0 (
       set has_compile_error=!true!
     )

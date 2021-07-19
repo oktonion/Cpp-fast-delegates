@@ -15,7 +15,7 @@ for file in ./tests/*.cpp; do
   filename=$(basename -- "$file")
   filename="${filename%.*}"
   echo "compiling test c++03 $filename"
-  output=$(($COMPILER -pedantic $exclude_warn $file -o "./tests/bin/$filename") 2>&1)
+  output=$(($COMPILER -pedantic $exclude_warn -DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN $file -o "./tests/bin/$filename") 2>&1)
   if [[ $? -ne 0 ]]; then
     if [[ $filename == *"fail"* ]]; then
       echo "failed as expected"
@@ -44,7 +44,7 @@ for file in ./tests/*.cpp; do
   filename=$(basename -- "$file")
   filename="${filename%.*}"
   echo "compiling test c++98 $filename"
-  output=$(($COMPILER -std=c++98 -pedantic $exclude_warn $file -o "./tests/bin/$filename") 2>&1)
+  output=$(($COMPILER -std=c++98 -pedantic $exclude_warn -DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN $file -o "./tests/bin/$filename") 2>&1)
   if [[ $? -ne 0 ]]; then
     if [[ $filename == *"fail"* ]]; then
       echo "failed as expected"

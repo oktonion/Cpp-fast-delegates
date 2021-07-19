@@ -24,7 +24,7 @@ for /f  %%f in ('dir /b ".\tests\*.cpp"') do (
   set has_compile_error=!false!
   set has_compile_warn=!false!
   set /A line_n=0
-  for /f "delims=" %%i in ('bcc32 -X- -w-inl -w-ccc -tWC -Q -n.\tests\obj\ -c ".\tests\%%f"') do (
+  for /f "delims=" %%i in ('bcc32 -X- -w-inl -w-ccc -tWC -Q -DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN -n.\tests\obj\ -c ".\tests\%%f"') do (
     set "MYOUTPUT=%%i"
     set "origin_str=!MYOUTPUT!"
     set "replaced_str=!origin_str:Error E=!"
@@ -98,7 +98,7 @@ for /f  %%f in ('dir /b ".\tests\*.cpp"') do (
   
   if !current_test_is_ok!==!true! if !has_compile_error!==!false! (
     set /A line_n=0
-    for /f "delims=" %%i in ('bcc32 -X- -w-inl -w-ccc -tWC -Q -lap -e.\tests\bin\%%~nf.exe .\tests\obj\%%~nf.obj') do (
+    for /f "delims=" %%i in ('bcc32 -X- -w-inl -w-ccc -tWC -DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN -Q -lap -e.\tests\bin\%%~nf.exe .\tests\obj\%%~nf.obj') do (
       set "MYOUTPUT=!MYOUTPUT!%%i"
       set "origin_str=!MYOUTPUT!"
       set "replaced_str=!origin_str:Error E=!"
