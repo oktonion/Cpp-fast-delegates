@@ -83,14 +83,13 @@ matrix:
       - CODE_COVERAGE_FLAGS=--coverage -fprofile-arcs -ftest-coverage
       - BUILD_SCRIPT="./build_tests.sh"
       - RUN_SCRIPT="./run_tests.sh"
-      ignore:
-      - "*/tests/*"  # ignore folders and all its contents
       after_success:
       - sudo pip install --upgrade pyOpenSSL
       - sudo pip install codecov
       - chmod +x ./get_code_cov.sh
       - ./get_code_cov.sh
       - codecov
+      - bash <(curl -s https://codecov.io/bash)
 
     - os: osx
       osx_image: xcode9
