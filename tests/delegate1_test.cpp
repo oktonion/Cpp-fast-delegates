@@ -82,6 +82,29 @@ TEST_CASE("Testing cpp delegate 1") {
 
 	SUBCASE("Delegate 1 free func invocation")
 	{
+		delegate<void, int> d1(&void_func_int);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		d1 = &void_func_int;
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		delegate<void, int> dd1 = d1;
+
+		func_called = false;
+		dd1(42);
+		CHECK(true == func_called);
+
+		func_called = false;
+	}
+
+	SUBCASE("Delegate 1 free func like member invocation")
+	{
         delegate<void, int> d1;
 		d1 = delegate<void, int>(&void_func_int);
 
