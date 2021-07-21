@@ -65,9 +65,10 @@ namespace delegates
             : pthis_(pthis)
             , caller_(get_caller(pthis, function_to_bind))
             , free_func_like_member_(NULL)
-            , member_func_(reinterpret_cast<member_func_type>(function_to_bind))
+            , member_func_(NULL)
             , free_func_(NULL)
         { 
+            std::memcpy(&member_func_, &function_to_bind, sizeof(function_to_bind));
             assert(NULL != pthis);
             assert(NULL != function_to_bind);
         }
@@ -78,9 +79,12 @@ namespace delegates
             : pthis_(pthis)
             , caller_(get_caller(pthis, function_to_bind))
             , free_func_like_member_(NULL)
-            , member_func_(reinterpret_cast<member_func_type>(function_to_bind)) 
+            , member_func_(NULL) 
             , free_func_(NULL)
         { 
+
+            std::memcpy(&member_func_, &function_to_bind, sizeof(function_to_bind));
+
             assert(NULL != pthis);
             assert(NULL != function_to_bind);
         }
@@ -90,30 +94,44 @@ namespace delegates
             ReturnT(*function_to_bind)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS))
             : pthis_(pthis)
             , caller_(get_caller(pthis, function_to_bind))
-            , free_func_like_member_(reinterpret_cast<free_func_like_member_type>(function_to_bind))
+            , free_func_like_member_(NULL)
             , member_func_(NULL) 
             , free_func_(NULL)
-        { }
+        { 
+
+            std::memcpy(&free_func_like_member_, &function_to_bind, sizeof(function_to_bind));
+
+        }
 
         template < class Y >
         delegate(Y *pthis,
             ReturnT(*function_to_bind)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS))
             : pthis_(pthis)
             , caller_(get_caller(pthis, function_to_bind))
-            , free_func_like_member_(reinterpret_cast<free_func_like_member_type>(function_to_bind))
+            , free_func_like_member_(NULL)
             , member_func_(NULL) 
             , free_func_(NULL)
-        { }
+        { 
+
+
+            std::memcpy(&free_func_like_member_, &function_to_bind, sizeof(function_to_bind));
+
+        }
 
         template < class Y >
         delegate(const Y *pthis,
             ReturnT(*function_to_bind)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS))
             : pthis_(pthis)
             , caller_(get_caller(pthis, function_to_bind))
-            , free_func_like_member_(reinterpret_cast<free_func_like_member_type>(function_to_bind))
+            , free_func_like_member_(NULL)
             , member_func_(NULL) 
             , free_func_(NULL)
-        { }
+        { 
+
+
+            std::memcpy(&free_func_like_member_, &function_to_bind, sizeof(function_to_bind));
+
+        }
 
 
         delegate(free_func_type function_to_bind)
