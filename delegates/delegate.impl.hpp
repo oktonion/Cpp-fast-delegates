@@ -35,22 +35,34 @@ namespace delegates
         template<class Y>
         inline
         caller_type get_caller(Y*, ReturnT(*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
-        { return &delegate::function_caller<Y>; }
+        { 
+            typedef ReturnT(*type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
+            return &delegate::function_caller<Y, type>;
+        }
 
         template<class Y>
         inline
         caller_type get_caller(const Y*, ReturnT(*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
-        { return &delegate::function_caller_const<Y>; }
+        { 
+            typedef ReturnT(*type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)
+            return &delegate::function_caller_const<Y, type>;
+        }
 
         template<class X, class Y>
         inline
         caller_type get_caller(X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS)) const
-        { return &delegate::mfunction_caller<X>; }
+        { 
+            typedef ReturnT(Y::*type)(DELEGATE_TEMPLATE_ARGS);
+            return &delegate::mfunction_caller<X, type>;
+        }
 
         template<class X, class Y>
         inline
         caller_type get_caller(const X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS) const) const
-        { return &delegate::mfunction_caller_const<X>; }
+        { 
+            typedef ReturnT(Y::* type)(DELEGATE_TEMPLATE_ARGS) const;
+            return &delegate::mfunction_caller_const<X, type>;
+        }
 
         inline
         caller_type get_caller(ReturnT(*)(DELEGATE_TEMPLATE_ARGS)) const
@@ -70,6 +82,7 @@ namespace delegates
             ReturnT(X::* function_to_bind)(DELEGATE_TEMPLATE_ARGS))
             : caller_(get_caller(pthis, function_to_bind))
         { 
+
             std::memset(&union_[0], 0, sizeof(union_));
 
             typename
@@ -77,6 +90,7 @@ namespace delegates
             <member_func_call, Y*, X*>::type f_call;
 
             f_call.pthis_ = pthis;
+            std::memset(&f_call.union_[0], 0, sizeof(f_call.union_));
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
             
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -97,6 +111,7 @@ namespace delegates
             <member_func_call, Y*, X*>::type f_call;
 
             f_call.pthis_ = pthis;
+            std::memset(&f_call.union_[0], 0, sizeof(f_call.union_));
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -115,6 +130,7 @@ namespace delegates
             member_func_call f_call;
 
             f_call.pthis_ = pthis;
+            std::memset(&f_call.union_[0], 0, sizeof(f_call.union_));
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -131,6 +147,7 @@ namespace delegates
 
             member_func_call f_call;
             f_call.pthis_ = pthis;
+            std::memset(&f_call.union_[0], 0, sizeof(f_call.union_));
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -147,6 +164,7 @@ namespace delegates
 
             member_func_call f_call;
             f_call.pthis_ = pthis;
+            std::memset(&f_call.union_[0], 0, sizeof(f_call.union_));
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -170,10 +188,14 @@ namespace delegates
             if (this == &other)
                 return;
 
-            using std::swap;
             if (caller_ || other.caller_)
             {
-                swap(caller_, other.caller_);
+                // swap for caller
+                {
+                    caller_type tmp = caller_;
+                    caller_ = other.caller_;
+                    other.caller_ = tmp;
+                }
                 // swap for arrays
                 {
                     unsigned char tmp[sizeof(union_)];
@@ -310,11 +332,9 @@ namespace delegates
             return func(DELEGATE_ARGS);
         }
 
-        template< class Y >
+        template< class Y, class real_free_func_like_member_type >
         static ReturnT function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
         { 
-            typedef ReturnT(*real_free_func_like_member_type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS );
-
             member_func_call call;
 
             std::memcpy(&call, &that.union_[0], sizeof(call));
@@ -329,11 +349,9 @@ namespace delegates
                 (pthis DELEGATE_COMMA DELEGATE_ARGS);
         }
 
-        template< class Y >
+        template< class Y, class real_free_func_like_member_type >
         static ReturnT function_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
         {
-            typedef ReturnT(*real_free_func_like_member_type)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-
             member_func_call call;
 
             std::memcpy(&call, &that.union_[0], sizeof(call));
@@ -348,11 +366,9 @@ namespace delegates
                 (pthis DELEGATE_COMMA DELEGATE_ARGS);
         }
 
-        template< class Y >
+        template< class Y, class real_member_func_type >
         static ReturnT mfunction_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
         { 
-            typedef ReturnT(Y::*real_member_func_type)(DELEGATE_TEMPLATE_ARGS);
-
             member_func_call call;
 
             std::memcpy(&call, &that.union_[0], sizeof(call));
@@ -367,11 +383,9 @@ namespace delegates
                 (DELEGATE_ARGS);
         }
 
-        template< class Y >
+        template< class Y, class real_member_func_type >
         static ReturnT mfunction_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
         {
-            typedef ReturnT(Y::*real_member_func_type)(DELEGATE_TEMPLATE_ARGS) const;
-
             member_func_call call;
 
             std::memcpy(&call, &that.union_[0], sizeof(call));
