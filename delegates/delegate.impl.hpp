@@ -28,8 +28,8 @@ namespace delegates
         {
             pthis_type pthis_;
             unsigned char union_[
-                sizeof(free_func_like_member_type) > sizeof(member_func_type) ?
-                    sizeof(free_func_like_member_type) : sizeof(member_func_type)];
+                (sizeof(free_func_like_member_type) > sizeof(member_func_type) ?
+                    sizeof(free_func_like_member_type) : sizeof(member_func_type)) * 2];
         };
 
         template<class Y>
@@ -72,8 +72,11 @@ namespace delegates
         { 
             std::memset(&union_[0], 0, sizeof(union_));
 
-            member_func_call f_call;
-            f_call.pthis_ = static_cast<pthis_type>(pthis);
+            typename
+            detail::disable_if_not_convertable
+            <member_func_call, Y*, X*>::type f_call;
+
+            f_call.pthis_ = pthis;
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
             
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -89,8 +92,11 @@ namespace delegates
         { 
             std::memset(&union_[0], 0, sizeof(union_));
 
-            member_func_call f_call;
-            f_call.pthis_ = static_cast<pthis_type>(pthis);
+            typename
+            detail::disable_if_not_convertable
+            <member_func_call, Y*, X*>::type f_call;
+
+            f_call.pthis_ = pthis;
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -107,7 +113,8 @@ namespace delegates
             std::memset(&union_[0], 0, sizeof(union_));
 
             member_func_call f_call;
-            f_call.pthis_ = static_cast<pthis_type>(pthis);
+
+            f_call.pthis_ = pthis;
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -123,7 +130,7 @@ namespace delegates
             std::memset(&union_[0], 0, sizeof(union_));
 
             member_func_call f_call;
-            f_call.pthis_ = static_cast<pthis_type>(pthis);
+            f_call.pthis_ = pthis;
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
@@ -139,7 +146,7 @@ namespace delegates
             std::memset(&union_[0], 0, sizeof(union_));
 
             member_func_call f_call;
-            f_call.pthis_ = static_cast<pthis_type>(pthis);
+            f_call.pthis_ = pthis;
             std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
 
             std::memcpy(&union_[0], &f_call, sizeof(f_call));
