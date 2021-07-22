@@ -31,6 +31,12 @@ struct Test
 	}
 };
 
+struct TestChild
+	: Test
+{
+
+};
+
 TEST_CASE("Testing cpp delegate 1") {
 	
 	using delegates::delegate;
@@ -130,6 +136,38 @@ TEST_CASE("Testing cpp delegate 1") {
 	{
 		delegate<void, int> d1;
 		Test tt;
+		d1 = delegate<void, int>(&tt, &Test::call);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		void* vptr = 0;
+		int* iptr;
+
+		d1 = delegate<void, int>(&tt, &Test::call_const);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+
+		delegate<void, int> dd1 = delegate<void, int>(&tt, &Test::call_const);
+
+		CHECK(dd1 == d1);
+
+		func_called = false;
+		dd1(42);
+		CHECK(true == func_called);
+
+		func_called = false;
+
+	}
+
+	SUBCASE("Delegate 1 child class member func invocation")
+	{
+		delegate<void, int> d1;
+		TestChild tt;
 		d1 = delegate<void, int>(&tt, &Test::call);
 
 		func_called = false;
