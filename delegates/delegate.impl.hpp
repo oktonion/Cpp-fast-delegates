@@ -82,7 +82,6 @@ namespace delegates
             , member_func_(NULL) 
             , free_func_(NULL)
         { 
-
             std::memcpy(&member_func_, &function_to_bind, sizeof(function_to_bind));
 
             assert(NULL != pthis);
@@ -98,9 +97,7 @@ namespace delegates
             , member_func_(NULL) 
             , free_func_(NULL)
         { 
-
             std::memcpy(&free_func_like_member_, &function_to_bind, sizeof(function_to_bind));
-
         }
 
         template < class Y >
@@ -112,10 +109,7 @@ namespace delegates
             , member_func_(NULL) 
             , free_func_(NULL)
         { 
-
-
             std::memcpy(&free_func_like_member_, &function_to_bind, sizeof(function_to_bind));
-
         }
 
         template < class Y >
@@ -127,10 +121,7 @@ namespace delegates
             , member_func_(NULL) 
             , free_func_(NULL)
         { 
-
-
             std::memcpy(&free_func_like_member_, &function_to_bind, sizeof(function_to_bind));
-
         }
 
 
@@ -297,8 +288,12 @@ namespace delegates
         { 
             typedef ReturnT(*real_free_func_like_member_type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS );
 
+            real_free_func_like_member_type func;
+
+            std::memcpy(&func, &that.free_func_like_member_, sizeof(func));
+
             return 
-                reinterpret_cast<real_free_func_like_member_type>(that.free_func_like_member_)
+                func
                 (static_cast<Y*>(const_cast<void*>(that.pthis_)) DELEGATE_COMMA DELEGATE_ARGS);
         }
 
@@ -307,8 +302,12 @@ namespace delegates
         {
             typedef ReturnT(*real_free_func_like_member_type)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
 
+            real_free_func_like_member_type func;
+
+            std::memcpy(&func, &that.free_func_like_member_, sizeof(func));
+
             return 
-                reinterpret_cast<real_free_func_like_member_type>(that.free_func_like_member_)
+                func
                 (static_cast<const Y*>(const_cast<const void*>(that.pthis_)) DELEGATE_COMMA DELEGATE_ARGS);
         }
 
@@ -317,8 +316,12 @@ namespace delegates
         { 
             typedef ReturnT(Y::*real_member_func_type)(DELEGATE_TEMPLATE_ARGS);
 
+            real_member_func_type func;
+
+            std::memcpy(&func, &that.member_func_, sizeof(func));
+
             return 
-                (static_cast<Y*>(const_cast<void*>(that.pthis_))->*reinterpret_cast<real_member_func_type>(that.member_func_))
+                (static_cast<Y*>(const_cast<void*>(that.pthis_))->*func)
                 (DELEGATE_ARGS);
         }
 
@@ -327,8 +330,12 @@ namespace delegates
         {
             typedef ReturnT(Y::*real_member_func_type)(DELEGATE_TEMPLATE_ARGS) const;
 
+            real_member_func_type func;
+
+            std::memcpy(&func, &that.member_func_, sizeof(func));
+
             return 
-                (static_cast<const Y*>(const_cast<const void*>(that.pthis_))->*reinterpret_cast<real_member_func_type>(that.member_func_))
+                (static_cast<const Y*>(const_cast<const void*>(that.pthis_))->*func)
                 (DELEGATE_ARGS);
         }
     };
