@@ -215,7 +215,7 @@ namespace delegates
 
         bool operator==(const delegate &other) const 
         {
-            if(caller_                != other.caller_)
+            if(caller_ != other.caller_)
                 return false;
             if(NULL != caller_)
                 return (0 == std::memcmp(&union_[0], &other.union_[0], sizeof(union_)));
