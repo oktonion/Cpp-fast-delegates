@@ -218,7 +218,7 @@ TEST_CASE("Testing cpp delegate 1") {
 	{
 		delegate<void, int> d1;
 		TestChild tt;
-		d1 = delegate<void, int>(&tt, &TestChild::v_func);
+		d1 = delegate<void, int>(&tt, &Test::v_func);
 
 		func_called = false;
 		d1(42);
@@ -227,14 +227,14 @@ TEST_CASE("Testing cpp delegate 1") {
 		void* vptr = 0;
 		int* iptr;
 
-		d1 = delegate<void, int>(&tt, &TestChild::v_func_const);
+		d1 = delegate<void, int>(&tt, &Test::v_func_const);
 
 		func_called = false;
 		d1(42);
 		CHECK(true == func_called);
 
 
-		delegate<void, int> dd1 = delegate<void, int>(&tt, &TestChild::v_func_const);
+		delegate<void, int> dd1 = delegate<void, int>(&tt, &Test::v_func_const);
 
 		CHECK(dd1 == d1);
 
