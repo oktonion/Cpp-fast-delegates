@@ -74,11 +74,21 @@ namespace delegates
             float func(double) {}
         };
 
+        class virtual_class2
+        {
+        protected:
+            virtual int pure_v_func2(int) = 0;
+            virtual int v_func2(int) {}
+            float func2(double) {}
+        };
+
         class virtual_class_child
             : virtual_class
+            , virtual_class2
         {
+            int pure_v_func2(int) {}
             virtual int v_func(int) {}
-            float func2(double) {}
+            float func_child(double) {}
             ~virtual_class_child() {}
         };
     }
