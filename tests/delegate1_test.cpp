@@ -3,7 +3,9 @@
 #include "..//delegates/delegate.h"
 
 
-bool func_called = false;
+namespace {
+	bool func_called = false;
+}
 
 void void_func_int(int)
 {
