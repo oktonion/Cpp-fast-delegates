@@ -15,6 +15,72 @@ namespace delegates
     namespace detail
     {
         struct DefaultVoid;
+
+        namespace type_traits
+        {
+            typedef char yes_type;
+            struct no_type
+            {
+                char d[8];
+            };
+
+            template<class T>
+            T& declref();
+
+            template<unsigned N> struct priority_tag : priority_tag < N - 1 > {};
+            template<> struct priority_tag<0> {};
+
+            struct any { template<class T> any(const T&) {} };
+
+            template<class T>
+            yes_type is_convertable_tester(T, priority_tag<1>);
+            template<class T>
+            no_type is_convertable_tester(any, priority_tag<0>);
+
+            template<class FromT, class ToT>
+            struct is_convertable
+            {
+                static const bool value =
+                    sizeof(is_convertable_tester<ToT>(declref<FromT>(), priority_tag<1>())) == sizeof(yes_type);
+            };
+
+            template <bool, class IfTrueT, class>
+            struct conditional
+            {
+                typedef IfTrueT type;
+            };
+
+            template <class IfTrueT, class IfFalseT>
+            struct conditional<false, IfTrueT, IfFalseT>
+            {
+                typedef IfFalseT type;
+            };
+        }
+
+        template<class T, class FromT, class ToT>
+        struct disable_if_not_convertable
+            : type_traits::conditional<
+                type_traits::is_convertable<FromT, ToT>::value,
+                T,
+                DefaultVoid
+            >
+        { };
+
+        class virtual_class
+        {
+        protected:
+            virtual ~virtual_class() {}
+            virtual int v_func(int) {}
+            float func(double) {}
+        };
+
+        class virtual_class_child
+            : virtual_class
+        {
+            virtual int v_func(int) {}
+            float func2(double) {}
+            ~virtual_class_child() {}
+        };
     }
 
     template <
