@@ -29,12 +29,30 @@ struct Test
 	{
 		func_called = true;
 	}
+
+	virtual void v_func(int)
+	{
+		func_called = true;
+	}
+
+	virtual void v_func_const(int)
+	{
+		func_called = true;
+	}
 };
 
 struct TestChild
 	: Test
 {
+	virtual void v_func(int) 
+	{
+		func_called = true;
+	}
 
+	virtual void v_func_const(int)
+	{
+		func_called = true;
+	}
 };
 
 TEST_CASE("Testing cpp delegate 1") {
@@ -185,6 +203,38 @@ TEST_CASE("Testing cpp delegate 1") {
 
 
 		delegate<void, int> dd1 = delegate<void, int>(&tt, &Test::call_const);
+
+		CHECK(dd1 == d1);
+
+		func_called = false;
+		dd1(42);
+		CHECK(true == func_called);
+
+		func_called = false;
+
+	}
+
+	SUBCASE("Delegate 1 child class virtual member func invocation")
+	{
+		delegate<void, int> d1;
+		TestChild tt;
+		d1 = delegate<void, int>(&tt, &TestChild::v_func);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		void* vptr = 0;
+		int* iptr;
+
+		d1 = delegate<void, int>(&tt, &TestChild::v_func_const);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+
+		delegate<void, int> dd1 = delegate<void, int>(&tt, &TestChild::v_func_const);
 
 		CHECK(dd1 == d1);
 
