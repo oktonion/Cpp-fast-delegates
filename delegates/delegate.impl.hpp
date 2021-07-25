@@ -44,7 +44,7 @@ namespace delegates
         inline
         caller_type get_caller(const Y*, ReturnT(*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
-            typedef ReturnT(*type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)
+            typedef ReturnT(*type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
             return &delegate::function_caller_const<Y, type>;
         }
 
