@@ -14,8 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: build
-      run: |
+      env:
         COMPILER=g++
+      run: |
         chmod a+rwx ./build_tests.sh
         ./build_tests.sh
     - name: run
