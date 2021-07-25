@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: build
-      run: chmod +arwx ./build_tests.sh && ./build_tests.sh
+      run: chmod a+rwx ./build_tests.sh && ./build_tests.sh
     - name: run
-      run: chmod +arwx ./run_tests.sh && ./run_tests.sh
+      run: chmod a+rwx ./run_tests.sh && ./run_tests.sh
