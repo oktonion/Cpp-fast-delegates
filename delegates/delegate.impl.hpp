@@ -207,6 +207,11 @@ namespace delegates
             
         }
 
+        friend void swap(delegate& lhs, delegate& rhs)
+        {
+            lhs.swap(rhs);
+        }
+
         delegate(const delegate &other)
         { 
             if (this == &other)
