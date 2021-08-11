@@ -114,7 +114,8 @@ namespace delegates
         caller_type get_caller(Y*, ReturnT(*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
             typedef ReturnT(*type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-            return &delegate::function_caller<Y, type>;
+            caller_type result = &delegate::function_caller<Y, type>;
+            return result;
         }
 
         template<class Y>
