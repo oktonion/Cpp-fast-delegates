@@ -32,6 +32,83 @@ namespace delegates
                     sizeof(free_func_like_member_type) : sizeof(member_func_type)) * 2];
         };
 
+        static ReturnT simple_function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
+        { 
+            free_func_type func;
+
+            std::memcpy(&func, &that.union_[0], sizeof(func));
+
+            return func(DELEGATE_ARGS);
+        }
+
+        template< class Y, class real_free_func_like_member_type >
+        static ReturnT function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
+        { 
+            member_func_call call;
+
+            std::memcpy(&call, &that.union_[0], sizeof(call));
+
+            real_free_func_like_member_type func;
+            Y* pthis = static_cast<Y*>(const_cast<void*>(call.pthis_));
+
+            std::memcpy(&func, &call.union_[0], sizeof(func));
+
+            return 
+                func
+                (pthis DELEGATE_COMMA DELEGATE_ARGS);
+        }
+
+        template< class Y, class real_free_func_like_member_type >
+        static ReturnT function_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
+        {
+            member_func_call call;
+
+            std::memcpy(&call, &that.union_[0], sizeof(call));
+
+            real_free_func_like_member_type func;
+            const Y* pthis = static_cast<const Y*>(const_cast<const void*>(call.pthis_));
+
+            std::memcpy(&func, &call.union_[0], sizeof(func));
+
+            return 
+                func
+                (pthis DELEGATE_COMMA DELEGATE_ARGS);
+        }
+
+        template< class Y, class real_member_func_type >
+        static ReturnT mfunction_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
+        { 
+            member_func_call call;
+
+            std::memcpy(&call, &that.union_[0], sizeof(call));
+
+            real_member_func_type func;
+            Y* pthis = static_cast<Y*>(const_cast<void*>(call.pthis_));
+
+            std::memcpy(&func, &call.union_[0], sizeof(func));
+
+            return 
+                (pthis->*func)
+                (DELEGATE_ARGS);
+        }
+
+        template< class Y, class real_member_func_type >
+        static ReturnT mfunction_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
+        {
+            member_func_call call;
+
+            std::memcpy(&call, &that.union_[0], sizeof(call));
+
+            real_member_func_type func;
+            const Y* pthis = static_cast<const Y*>(const_cast<const void*>(call.pthis_));
+
+            std::memcpy(&func, &call.union_[0], sizeof(func));
+
+            return 
+                (pthis->*func)
+                (DELEGATE_ARGS);
+        }
+
         template<class Y>
         inline
         caller_type get_caller(Y*, ReturnT(*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
@@ -327,83 +404,6 @@ namespace delegates
         unsigned char union_[
             sizeof(member_func_call) > sizeof(free_func_type) ? 
                 sizeof(member_func_call) : sizeof(free_func_type)];
-
-        static ReturnT simple_function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
-        { 
-            free_func_type func;
-
-            std::memcpy(&func, &that.union_[0], sizeof(func));
-
-            return func(DELEGATE_ARGS);
-        }
-
-        template< class Y, class real_free_func_like_member_type >
-        static ReturnT function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
-        { 
-            member_func_call call;
-
-            std::memcpy(&call, &that.union_[0], sizeof(call));
-
-            real_free_func_like_member_type func;
-            Y* pthis = static_cast<Y*>(const_cast<void*>(call.pthis_));
-
-            std::memcpy(&func, &call.union_[0], sizeof(func));
-
-            return 
-                func
-                (pthis DELEGATE_COMMA DELEGATE_ARGS);
-        }
-
-        template< class Y, class real_free_func_like_member_type >
-        static ReturnT function_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
-        {
-            member_func_call call;
-
-            std::memcpy(&call, &that.union_[0], sizeof(call));
-
-            real_free_func_like_member_type func;
-            const Y* pthis = static_cast<const Y*>(const_cast<const void*>(call.pthis_));
-
-            std::memcpy(&func, &call.union_[0], sizeof(func));
-
-            return 
-                func
-                (pthis DELEGATE_COMMA DELEGATE_ARGS);
-        }
-
-        template< class Y, class real_member_func_type >
-        static ReturnT mfunction_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
-        { 
-            member_func_call call;
-
-            std::memcpy(&call, &that.union_[0], sizeof(call));
-
-            real_member_func_type func;
-            Y* pthis = static_cast<Y*>(const_cast<void*>(call.pthis_));
-
-            std::memcpy(&func, &call.union_[0], sizeof(func));
-
-            return 
-                (pthis->*func)
-                (DELEGATE_ARGS);
-        }
-
-        template< class Y, class real_member_func_type >
-        static ReturnT mfunction_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
-        {
-            member_func_call call;
-
-            std::memcpy(&call, &that.union_[0], sizeof(call));
-
-            real_member_func_type func;
-            const Y* pthis = static_cast<const Y*>(const_cast<const void*>(call.pthis_));
-
-            std::memcpy(&func, &call.union_[0], sizeof(func));
-
-            return 
-                (pthis->*func)
-                (DELEGATE_ARGS);
-        }
     };
 
     template < class X, class Y, class ReturnT DELEGATE_COMMA DELEGATE_TEMPLATE_PARAMS>
