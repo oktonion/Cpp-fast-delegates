@@ -82,7 +82,6 @@ TEST_CASE("Testing cpp delegate 1") {
 		CHECK(d1);
 
         void *vptr = 0;
-        int *iptr;
 
         d1 = delegate<void, int>(vptr, &void_func_void_p_int);
 
@@ -100,7 +99,6 @@ TEST_CASE("Testing cpp delegate 1") {
 		CHECK(d1 == dd1);
 
         void *vptr = 0;
-        int *iptr;
 		
         d1 = delegate<void, int>(vptr, &void_func_void_p_int);
 
@@ -140,7 +138,6 @@ TEST_CASE("Testing cpp delegate 1") {
 		CHECK(true == func_called);
 
         void *vptr = 0;
-        int *iptr;
 
         d1 = delegate<void, int>(vptr, &void_func_void_p_int);
 
@@ -160,8 +157,6 @@ TEST_CASE("Testing cpp delegate 1") {
 		func_called = false;
 		d1(42);
 		CHECK(true == func_called);
-
-		int* iptr;
 
 		d1 = delegate<void, int>(&tt, &Test::call_const);
 
@@ -192,8 +187,6 @@ TEST_CASE("Testing cpp delegate 1") {
 		d1(42);
 		CHECK(true == func_called);
 
-		int* iptr;
-
 		d1 = delegate<void, int>(&tt, &Test::call_const);
 
 		func_called = false;
@@ -223,8 +216,6 @@ TEST_CASE("Testing cpp delegate 1") {
 		d1(42);
 		CHECK(true == child_func_called);
 
-		int* iptr;
-
 		d1 = delegate<void, int>(&tt, &Test::v_func_const);
 
 		child_func_called = false;
@@ -252,12 +243,12 @@ TEST_CASE("Testing cpp delegate 1") {
 			CHECK(true == child_func_called);
 
 		
-			delegate<void, int> dd1 = delegate<void, int>(&t, &Test::v_func_const);
+			delegate<void, int> ddd1 = delegate<void, int>(&t, &Test::v_func_const);
 
-			CHECK(dd1 == d1);
+			CHECK(ddd1 == d1);
 
 			child_func_called = false;
-			dd1(42);
+			ddd1(42);
 			CHECK(true == child_func_called);
 
 			child_func_called = false;

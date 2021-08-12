@@ -62,7 +62,6 @@ TEST_CASE("Testing cpp delegate 0") {
 		CHECK(true == func_called);
 
         void *vptr = 0;
-        int *iptr;
 
         d0 = delegate<void>(vptr, &void_func_void_p);
 
@@ -82,8 +81,6 @@ TEST_CASE("Testing cpp delegate 0") {
 		func_called = false;
 		d0();
 		CHECK(true == func_called);
-
-		int* iptr;
 
 		d0 = delegate<void>(&tt, &Test::call_const);
 
