@@ -1718,7 +1718,7 @@ DOCTEST_MSVC_SUPPRESS_WARNING_POP
                 res = !res;
 
             if(!res || getContextOptions()->success)
-                return Result(res, toString(lhs));
+                return Result(res, doctest::toString(lhs));
             return Result(res);
         }
 #if defined(__BORLANDC__)
