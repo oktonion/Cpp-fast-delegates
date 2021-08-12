@@ -113,32 +113,32 @@ namespace delegates
         inline
         caller_type get_caller(Y*, ReturnT(*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
-            typedef ReturnT(*type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-            return &function_caller<Y, type>;
+            typedef ReturnT(*func_type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
+            return &function_caller<Y, func_type>;
         }
 
         template<class Y>
         inline
         caller_type get_caller(const Y*, ReturnT(*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
-            typedef ReturnT(*type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-            return &function_caller_const<Y, type>;
+            typedef ReturnT(*func_type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
+            return &function_caller_const<Y, func_type>;
         }
 
         template<class X, class Y>
         inline
         caller_type get_caller(X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS)) const
         { 
-            typedef ReturnT(Y::*type)(DELEGATE_TEMPLATE_ARGS);
-            return &mfunction_caller<X, type>;
+            typedef ReturnT(Y::*func_type)(DELEGATE_TEMPLATE_ARGS);
+            return &mfunction_caller<X, func_type>;
         }
 
         template<class X, class Y>
         inline
         caller_type get_caller(const X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS) const) const
         { 
-            typedef ReturnT(Y::* type)(DELEGATE_TEMPLATE_ARGS) const;
-            return &mfunction_caller_const<X, type>;
+            typedef ReturnT(Y::* func_type)(DELEGATE_TEMPLATE_ARGS) const;
+            return &mfunction_caller_const<X, func_type>;
         }
 
         inline
