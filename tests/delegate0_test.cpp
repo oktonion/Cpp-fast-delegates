@@ -55,7 +55,9 @@ TEST_CASE("Testing cpp delegate 0") {
 	SUBCASE("Delegate 0 free func invocation")
 	{
         delegate<void> d0;
+		REQUIRE(!d0);
 		d0 = delegate<void>(&void_func);
+		CHECK(d0);
 
 		func_called = false;
 		d0();
@@ -75,8 +77,10 @@ TEST_CASE("Testing cpp delegate 0") {
 	SUBCASE("Delegate 0 class member func invocation")
 	{
 		delegate<void> d0;
+		REQUIRE(!d0);
 		Test tt;
 		d0 = delegate<void>(&tt, &Test::call);
+		CHECK(d0);
 
 		func_called = false;
 		d0();
@@ -89,9 +93,17 @@ TEST_CASE("Testing cpp delegate 0") {
 		CHECK(true == func_called);
 
 
-		delegate<void> dd0 = delegate<void>(&tt, &Test::call_const);
+		delegate<void> dd0;
+
+		CHECK(dd0 != d0);
+		CHECK(d0 != dd0);
+
+		REQUIRE(dd0 != d0);
+
+		dd0 = delegate<void>(&tt, &Test::call_const);
 
 		CHECK(dd0 == d0);
+		CHECK(d0 == dd0);
 
 		func_called = false;
 		dd0();
