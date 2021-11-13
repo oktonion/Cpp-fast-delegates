@@ -605,26 +605,6 @@ DOCTEST_GCC_SUPPRESS_WARNING_POP
 #define DOCTEST_STD_NAMESPACE_END }
 #endif // _LIBCPP_VERSION
 
-
-// static assert macro - because of the c++98 support requires that the message is an
-// identifier (no spaces and not a C string) - example without quotes: I_am_a_message
-// taken from here: http://stackoverflow.com/a/1980156/3162383
-#ifdef DOCTEST_CONFIG_WITH_STATIC_ASSERT
-#define DOCTEST_STATIC_ASSERT(expression, message) static_assert(expression, #message)
-#else // DOCTEST_CONFIG_WITH_STATIC_ASSERT
-#define DOCTEST_STATIC_ASSERT(expression, message)                                                 \
-    struct DOCTEST_CAT(__static_assertion_at_line_, __LINE__)                                      \
-    {                                                                                              \
-        doctest::detail::static_assert_impl::StaticAssertion<static_cast<bool>((expression))>      \
-                DOCTEST_CAT(DOCTEST_CAT(DOCTEST_CAT(STATIC_ASSERTION_FAILED_AT_LINE_, __LINE__),   \
-                                        _),                                                        \
-                            message);                                                              \
-    };                                                                                             \
-    typedef doctest::detail::static_assert_impl::StaticAssertionTest<static_cast<int>(             \
-            sizeof(DOCTEST_CAT(__static_assertion_at_line_, __LINE__)))>                           \
-            DOCTEST_CAT(__static_assertion_test_at_line_, __LINE__)
-#endif // DOCTEST_CONFIG_WITH_STATIC_ASSERT
-
 // Forward declaring 'X' in namespace std is not permitted by the C++ Standard.
 DOCTEST_MSVC_SUPPRESS_WARNING_WITH_PUSH(4643)
 
@@ -652,6 +632,25 @@ DOCTEST_STD_NAMESPACE_END
 DOCTEST_MSVC_SUPPRESS_WARNING_POP
 
 #endif // DOCTEST_CONFIG_USE_STD_HEADERS
+
+// static assert macro - because of the c++98 support requires that the message is an
+// identifier (no spaces and not a C string) - example without quotes: I_am_a_message
+// taken from here: http://stackoverflow.com/a/1980156/3162383
+#ifdef DOCTEST_CONFIG_WITH_STATIC_ASSERT
+#define DOCTEST_STATIC_ASSERT(expression, message) static_assert(expression, #message)
+#else // DOCTEST_CONFIG_WITH_STATIC_ASSERT
+#define DOCTEST_STATIC_ASSERT(expression, message)                                                 \
+    struct DOCTEST_CAT(__static_assertion_at_line_, __LINE__)                                      \
+    {                                                                                              \
+        doctest::detail::static_assert_impl::StaticAssertion<static_cast<bool>((expression))>      \
+                DOCTEST_CAT(DOCTEST_CAT(DOCTEST_CAT(STATIC_ASSERTION_FAILED_AT_LINE_, __LINE__),   \
+                                        _),                                                        \
+                            message);                                                              \
+    };                                                                                             \
+    typedef doctest::detail::static_assert_impl::StaticAssertionTest<static_cast<int>(             \
+            sizeof(DOCTEST_CAT(__static_assertion_at_line_, __LINE__)))>                           \
+            DOCTEST_CAT(__static_assertion_test_at_line_, __LINE__)
+#endif // DOCTEST_CONFIG_WITH_STATIC_ASSERT
 
 #ifdef DOCTEST_CONFIG_INCLUDE_TYPE_TRAITS
 #include <type_traits>
@@ -1556,7 +1555,7 @@ DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wunused-comparison")
 #endif
 
 #ifdef DOCTEST_CONFIG_WITH_RVALUE_REFERENCES
-#define DOCTEST_CONFIG_RV_REF_WRAP(type) type&&
+#define DOCTEST_CONFIG_RV_REF_WRAP(type) const type&
 //#define DOCTEST_CONFIG_FORWARD(type) doctest::detail::forward<L>
 #define DOCTEST_CONFIG_FORWARD(type)
 #else
@@ -2147,7 +2146,7 @@ DOCTEST_CLANG_SUPPRESS_WARNING_POP
 
         void operator()(std::ostream* s_name) const {
             mb_name.m_stream = s_name;
-            mb_name << expr;
+            mb_name * expr;
         };
     };
 } // namespace detail
@@ -2710,15 +2709,17 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 
 // for logging
 #define DOCTEST_INFO(expression)                                                                   \
-    DOCTEST_INFO_IMPL(DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_), DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_),  \
-                      DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_), expression)
+    DOCTEST_INFO_IMPL(DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_LAMBDA_), DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_MB_),  \
+                      DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_STREAM_), expression)
 
 #ifdef DOCTEST_NO_CPP11_COMPAT
 #define DOCTEST_INFO_IMPL(lambda_name, mb_name, s_name, expression)                                \
-        int line = __LINE__;                                                                       \
+        {}                                                                                         \
     DOCTEST_MSVC_SUPPRESS_WARNING_WITH_PUSH(4626)                                                  \
+    int mb_name_line = __LINE__;                                                                   \
     auto lambda_name = [&](std::ostream* s_name) {                                                 \
-        doctest::detail::MessageBuilder mb_name(__FILE__, line, doctest::assertType::is_warn);     \
+        doctest::detail::MessageBuilder                                                            \
+                mb_name(__FILE__, mb_name_line, doctest::assertType::is_warn);                     \
         mb_name.m_stream = s_name;                                                                 \
         mb_name * expression;                                                                      \
     };                                                                                             \
@@ -2726,6 +2727,7 @@ int registerReporter(const char* name, int priority, bool isReporter) {
     auto DOCTEST_ANONYMOUS(_DOCTEST_CAPTURE_) = doctest::detail::MakeContextScope(lambda_name);    
 #else // DOCTEST_NO_CPP11_COMPAT
 #define DOCTEST_INFO_IMPL(lambda_name, mb_name, s_name, expression)                                \
+        {}                                                                                         \
     DOCTEST_MSVC_SUPPRESS_WARNING_WITH_PUSH(4626)                                                  \
     doctest::detail::ContextScopeLambda lambda_name(__FILE__, __LINE__, ""); {                     \
     std::stringstream ss; ss << expression; lambda_name.expr = ss.str();}                          \
@@ -2766,23 +2768,24 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 #ifndef DOCTEST_CONFIG_SUPER_FAST_ASSERTS
 
 #ifdef DOCTEST_CONFIG_WITH_VARIADIC_MACROS
-#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, ...)                                               \
+#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, info, ...)                                         \
     DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")                  \
     doctest::detail::ResultBuilder _DOCTEST_RB(doctest::assertType::assert_type, __FILE__,         \
                                                __LINE__, #__VA_ARGS__);                            \
     DOCTEST_WRAP_IN_TRY(_DOCTEST_RB.setResult(                                                     \
             doctest::detail::ExpressionDecomposer(doctest::assertType::assert_type)                \
             << __VA_ARGS__))                                                                       \
+    info;                                                                                          \
     DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB)                                                      \
     DOCTEST_CLANG_SUPPRESS_WARNING_POP
 
 #define DOCTEST_ASSERT_IMPLEMENT_1(assert_type, ...)                                               \
     do {                                                                                           \
-        DOCTEST_ASSERT_IMPLEMENT_2(assert_type, __VA_ARGS__);                                      \
+        DOCTEST_ASSERT_IMPLEMENT_2(assert_type, (void)(0), __VA_ARGS__);                           \
     } while((void)0, 0)
 #else // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
 
-#define DOCTEST_ASSERT_IMPLEMENT_2(expr, assert_type)                                              \
+#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, info, expr)                                        \
     DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")                  \
     doctest::detail::ResultBuilder _DOCTEST_RB(                                                    \
             doctest::assertType::assert_type, __FILE__, __LINE__,                          \
@@ -2790,12 +2793,13 @@ int registerReporter(const char* name, int priority, bool isReporter) {
     DOCTEST_WRAP_IN_TRY(_DOCTEST_RB.setResult(                                                     \
             doctest::detail::ExpressionDecomposer(doctest::assertType::assert_type)        \
             << DOCTEST_HANDLE_BRACED_VA_ARGS(expr)))                                               \
+    info;                                                                                          \
     DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB)                                                      \
     DOCTEST_CLANG_SUPPRESS_WARNING_POP
 
-#define DOCTEST_ASSERT_IMPLEMENT_1(expr, assert_type)                                              \
+#define DOCTEST_ASSERT_IMPLEMENT_1(assert_type, expr)                                              \
     do {                                                                                           \
-        DOCTEST_ASSERT_IMPLEMENT_2(expr, assert_type);                                             \
+        DOCTEST_ASSERT_IMPLEMENT_2(assert_type, (void)(0), expr);                                  \
     } while((void)0, 0)
 #endif // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
 
@@ -2804,7 +2808,8 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 #ifdef DOCTEST_CONFIG_WITH_VARIADIC_MACROS
 
 // necessary for <ASSERT>_MESSAGE
-#define DOCTEST_ASSERT_IMPLEMENT_2 DOCTEST_ASSERT_IMPLEMENT_1
+#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, info, expr)                                        \
+    DOCTEST_ASSERT_IMPLEMENT_1(assert_type, expr)
 
 #define DOCTEST_ASSERT_IMPLEMENT_1(assert_type, ...)                                               \
     DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")                  \
@@ -2814,7 +2819,7 @@ int registerReporter(const char* name, int priority, bool isReporter) {
                     << __VA_ARGS__) DOCTEST_CLANG_SUPPRESS_WARNING_POP
 #else // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
 
-#define DOCTEST_ASSERT_IMPLEMENT_2(expr, assert_type)                                              \
+#define DOCTEST_ASSERT_IMPLEMENT_2(assert_type, info, expr)                                        \
     DOCTEST_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Woverloaded-shift-op-parentheses")                  \
     doctest::detail::ResultBuilder _DOCTEST_RB(                                                    \
             doctest::assertType::assert_type, __FILE__, __LINE__,                          \
@@ -2822,12 +2827,13 @@ int registerReporter(const char* name, int priority, bool isReporter) {
     DOCTEST_WRAP_IN_TRY(_DOCTEST_RB.setResult(                                                     \
             doctest::detail::ExpressionDecomposer(doctest::assertType::assert_type)        \
             << DOCTEST_HANDLE_BRACED_VA_ARGS(expr)))                                               \
+    info;                                                                                          \
     DOCTEST_ASSERT_LOG_AND_REACT(_DOCTEST_RB)                                                      \
     DOCTEST_CLANG_SUPPRESS_WARNING_POP
 
-#define DOCTEST_ASSERT_IMPLEMENT_1(expr, assert_type)                                              \
+#define DOCTEST_ASSERT_IMPLEMENT_1(assert_type, expr)                                              \
     do {                                                                                           \
-        DOCTEST_ASSERT_IMPLEMENT_2(expr, assert_type);                                             \
+        DOCTEST_ASSERT_IMPLEMENT_2(assert_type, (void)(0), expr);                                   \
     } while((void)0, 0)
 #endif // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
 #endif // DOCTEST_CONFIG_SUPER_FAST_ASSERTS
@@ -2840,30 +2846,21 @@ int registerReporter(const char* name, int priority, bool isReporter) {
 #define DOCTEST_CHECK_FALSE(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_CHECK_FALSE, __VA_ARGS__)
 #define DOCTEST_REQUIRE_FALSE(...) DOCTEST_ASSERT_IMPLEMENT_1(DT_REQUIRE_FALSE, __VA_ARGS__)
 #else // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
-#define DOCTEST_WARN(expr) DOCTEST_ASSERT_IMPLEMENT_1(expr, DT_WARN)
-#define DOCTEST_CHECK(expr) DOCTEST_ASSERT_IMPLEMENT_1(expr, DT_CHECK)
-#define DOCTEST_REQUIRE(expr) DOCTEST_ASSERT_IMPLEMENT_1(expr, DT_REQUIRE)
-#define DOCTEST_WARN_FALSE(expr) DOCTEST_ASSERT_IMPLEMENT_1(expr, DT_WARN_FALSE)
-#define DOCTEST_CHECK_FALSE(expr) DOCTEST_ASSERT_IMPLEMENT_1(expr, DT_CHECK_FALSE)
-#define DOCTEST_REQUIRE_FALSE(expr) DOCTEST_ASSERT_IMPLEMENT_1(expr, DT_REQUIRE_FALSE)
+#define DOCTEST_WARN(expr) DOCTEST_ASSERT_IMPLEMENT_1(DT_WARN, expr)
+#define DOCTEST_CHECK(expr) DOCTEST_ASSERT_IMPLEMENT_1(DT_CHECK, expr)
+#define DOCTEST_REQUIRE(expr) DOCTEST_ASSERT_IMPLEMENT_1(DT_REQUIRE, expr)
+#define DOCTEST_WARN_FALSE(expr) DOCTEST_ASSERT_IMPLEMENT_1(DT_WARN_FALSE, expr)
+#define DOCTEST_CHECK_FALSE(expr) DOCTEST_ASSERT_IMPLEMENT_1(DT_CHECK_FALSE, expr)
+#define DOCTEST_REQUIRE_FALSE(expr) DOCTEST_ASSERT_IMPLEMENT_1(DT_REQUIRE_FALSE, expr)
 #endif // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
 
 // clang-format off
-#ifdef DOCTEST_CONFIG_WITH_VARIADIC_MACROS
-#define DOCTEST_WARN_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(DT_WARN, cond); } while((void)0, 0)
-#define DOCTEST_CHECK_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(DT_CHECK, cond); } while((void)0, 0)
-#define DOCTEST_REQUIRE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(DT_REQUIRE, cond); } while((void)0, 0)
-#define DOCTEST_WARN_FALSE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(DT_WARN_FALSE, cond); } while((void)0, 0)
-#define DOCTEST_CHECK_FALSE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(DT_CHECK_FALSE, cond); } while((void)0, 0)
-#define DOCTEST_REQUIRE_FALSE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(DT_REQUIRE_FALSE, cond); } while((void)0, 0)
-#else // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
-#define DOCTEST_WARN_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(cond, DT_WARN); } while((void)0, 0)
-#define DOCTEST_CHECK_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(cond, DT_CHECK); } while((void)0, 0)
-#define DOCTEST_REQUIRE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(cond, DT_REQUIRE); } while((void)0, 0)
-#define DOCTEST_WARN_FALSE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(cond, DT_WARN_FALSE); } while((void)0, 0)
-#define DOCTEST_CHECK_FALSE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(cond, DT_CHECK_FALSE); } while((void)0, 0)
-#define DOCTEST_REQUIRE_FALSE_MESSAGE(cond, msg) do { DOCTEST_INFO(msg); DOCTEST_ASSERT_IMPLEMENT_2(cond, DT_REQUIRE_FALSE); } while((void)0, 0)
-#endif // DOCTEST_CONFIG_WITH_VARIADIC_MACROS
+#define DOCTEST_WARN_MESSAGE(cond, msg) do { DOCTEST_ASSERT_IMPLEMENT_2(DT_WARN, DOCTEST_INFO(msg), cond); } while((void)0, 0)
+#define DOCTEST_CHECK_MESSAGE(cond, msg) do { DOCTEST_ASSERT_IMPLEMENT_2(DT_CHECK, DOCTEST_INFO(msg), cond); } while((void)0, 0)
+#define DOCTEST_REQUIRE_MESSAGE(cond, msg) do { DOCTEST_ASSERT_IMPLEMENT_2(DT_REQUIRE, DOCTEST_INFO(msg), cond); } while((void)0, 0)
+#define DOCTEST_WARN_FALSE_MESSAGE(cond, msg) do { DOCTEST_ASSERT_IMPLEMENT_2(DT_WARN_FALSE, DOCTEST_INFO(msg), cond); } while((void)0, 0)
+#define DOCTEST_CHECK_FALSE_MESSAGE(cond, msg) do { DOCTEST_ASSERT_IMPLEMENT_2(DT_CHECK_FALSE, DOCTEST_INFO(msg), cond); } while((void)0, 0)
+#define DOCTEST_REQUIRE_FALSE_MESSAGE(cond, msg) do { DOCTEST_ASSERT_IMPLEMENT_2(DT_REQUIRE_FALSE, DOCTEST_INFO(msg), cond); } while((void)0, 0)
 // clang-format on
 
 #define DOCTEST_ASSERT_THROWS(expr, assert_type)                                                   \
@@ -2886,8 +2883,8 @@ int registerReporter(const char* name, int priority, bool isReporter) {
                                                        __LINE__, #expr, #__VA_ARGS__, message);    \
             try {                                                                                  \
                 DOCTEST_CAST_TO_VOID(expr)                                                         \
-            } catch(const typename doctest::detail::remove_const<                                  \
-                    typename doctest::detail::remove_reference<__VA_ARGS__>::type>::type&) {       \
+            } catch(const doctest::detail::remove_const<                                           \
+                    doctest::detail::remove_reference<__VA_ARGS__>::type>::type&) {                \
                 _DOCTEST_RB.translateException();                                                  \
                 _DOCTEST_RB.m_threw_as = true;                                                     \
             } catch(...) { _DOCTEST_RB.translateException(); }                                     \
@@ -5399,7 +5396,7 @@ namespace detail{
                 }
             };
 
-            std::set_terminate(&lambdas::terminate_handler);
+            original_terminate_handler = std::set_terminate(&lambdas::terminate_handler);
 
             // SIGABRT is raised when:
             // - std::terminate is called FROM A DIFFERENT THREAD
@@ -7128,7 +7125,7 @@ DOCTEST_CLANG_SUPPRESS_WARNING_POP
         }
 
         void log_assert(const AssertData& rb) DOCTEST_OVERRIDE {
-            if(!rb.m_failed && !opt.success || tc->m_no_output)
+            if(!rb.m_failed && !opt.success)
                 return;
 #ifdef DOCTEST_FULL_CPP11_COMPAT
             std::lock_guard<std::mutex> lock(mutex);
