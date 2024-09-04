@@ -55,6 +55,24 @@ namespace delegates
             {
                 typedef IfFalseT type;
             };
+
+            template<class T>
+            struct is_const {
+                static const bool value = false;
+            };
+            template<class T>
+            struct is_const<const T> {
+                static const bool value = true;
+            };
+
+            template<class T>
+            struct is_void {
+                static const bool value = false;
+            };
+            template<>
+            struct is_void<void> {
+                static const bool value = true;
+            };
         }
 
         template<class T, class FromT, class ToT>
@@ -63,6 +81,15 @@ namespace delegates
                 type_traits::is_convertable<FromT, ToT>::value,
                 T,
                 DefaultVoid
+            >
+        { };
+
+        template<class T, class NonConstT>
+        struct disable_if_const
+            : type_traits::conditional<
+                type_traits::is_const<NonConstT>::value,
+                DefaultVoid,
+                T
             >
         { };
 
