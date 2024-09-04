@@ -26,6 +26,20 @@ struct Test
 	}
 };
 
+template<class T>
+void tmpl_void_func() {}
+template<class T>
+void tmpl_func_p(T*) {}
+
+template<class T>
+delegates::delegate<void> tmpl1_void_func_delegate() {
+	return &tmpl_void_func<T>;
+}
+template<class T>
+delegates::delegate<void> tmpl2_void_func_delegate() {
+	return &tmpl_void_func<T>;
+}
+
 TEST_CASE("Testing cpp delegate 0") {
 	
 	using delegates::delegate;
@@ -111,5 +125,54 @@ TEST_CASE("Testing cpp delegate 0") {
 
 		func_called = false;
 
+	}
+
+	SUBCASE("Delegate 0 comparison")
+	{
+		delegate<void> d0;
+		REQUIRE(!d0);
+		d0 = delegate<void>(&tmpl_void_func<int>);
+		delegate<void> d0_other = d0;
+
+		CHECK(d0_other == d0);
+		CHECK_FALSE(d0_other != d0);
+		CHECK_FALSE(d0_other < d0);
+
+		d0_other = delegate<void>(&tmpl_void_func<int>);
+
+		CHECK(d0_other == d0);
+		CHECK_FALSE(d0_other != d0);
+		CHECK_FALSE(d0_other < d0);
+
+		d0_other = delegate<void>(tmpl1_void_func_delegate<int>());
+
+		CHECK(d0_other == d0);
+		CHECK_FALSE(d0_other != d0);
+		CHECK_FALSE(d0_other < d0);
+
+		d0 = delegate<void>(tmpl2_void_func_delegate<int>());
+
+		CHECK(d0_other == d0);
+		CHECK_FALSE(d0_other != d0);
+		CHECK_FALSE(d0_other < d0);
+
+		{
+			int a = 0;
+			d0_other = delegate<void>(&a, &tmpl_func_p<int>);
+
+			CHECK_FALSE(d0_other == d0);
+			CHECK(d0_other != d0);
+
+			d0 = delegate<void>(&a, &tmpl_func_p<int>);
+
+			CHECK(d0_other == d0);
+			CHECK_FALSE(d0_other != d0);
+			CHECK_FALSE(d0_other < d0);
+		}
+
+		d0_other = delegate<void>(&tmpl_void_func<float>);
+
+		CHECK_FALSE(d0_other == d0);
+		CHECK(d0_other != d0);
 	}
 }
