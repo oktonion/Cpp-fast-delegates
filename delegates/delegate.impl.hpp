@@ -28,7 +28,7 @@ namespace delegates
         {
             unsigned char union_[
                 (sizeof(free_func_like_member_type) > sizeof(member_func_type) ?
-                    sizeof(free_func_like_member_type) : sizeof(member_func_type)) * 2];
+                    sizeof(free_func_like_member_type) : sizeof(member_func_type))];
             pthis_type pthis_;
         };
 
