@@ -30,5 +30,7 @@ foreach(test_source_file ${TESTS_SOURCES})
     add_executable(${test_name} 
         ${test_source_file}
     )
-    doctest_discover_tests(${test_name})
+    if (${CMAKE_SYSTEM_NAME} EQUAL ${CMAKE_HOST_SYSTEM_NAME})
+        doctest_discover_tests(${test_name})
+    endif()
 endforeach(test_source_file ${TEST_SOURCES})
