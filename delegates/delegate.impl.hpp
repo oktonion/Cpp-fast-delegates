@@ -228,7 +228,7 @@ namespace delegates
         comparator_type get_comparator(Y*, ReturnT(*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
             typedef ReturnT(*func_type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-            return &delegate::function_comparator<Y, func_type>;
+            return &function_comparator<Y, func_type>;
         }
 
         template<class Y>
@@ -236,7 +236,7 @@ namespace delegates
         comparator_type get_comparator(const Y*, ReturnT(*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
             typedef ReturnT(*func_type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-            return &delegate::function_comparator<Y, func_type>;
+            return &function_comparator<Y, func_type>;
         }
 
         template<class X, class Y>
@@ -244,7 +244,7 @@ namespace delegates
         comparator_type get_comparator(X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS)) const
         { 
             typedef ReturnT(Y::*func_type)(DELEGATE_TEMPLATE_ARGS);
-            return &delegate::mfunction_comparator<X, func_type>;
+            return &mfunction_comparator<X, func_type>;
         }
 
         template<class X, class Y>
@@ -252,12 +252,12 @@ namespace delegates
         comparator_type get_comparator(const X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS) const) const
         { 
             typedef ReturnT(Y::* func_type)(DELEGATE_TEMPLATE_ARGS) const;
-            return &delegate::mfunction_comparator<X, func_type>;
+            return &mfunction_comparator<X, func_type>;
         }
 
         inline
         comparator_type get_comparator(ReturnT(*)(DELEGATE_TEMPLATE_ARGS)) const
-        { return &delegate::simple_function_comparator; }
+        { return &simple_function_comparator; }
 
     public:
         typedef delegate type;
