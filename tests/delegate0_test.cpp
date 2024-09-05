@@ -176,6 +176,31 @@ TEST_CASE("Testing cpp delegate 0") {
 			CHECK_FALSE(d0_other < d0);
 		}
 
+		{
+			Test t;
+			d0_other = delegate<void>(&t, &Test::call);
+
+			CHECK_FALSE(d0_other == d0);
+			CHECK(d0_other != d0);
+
+			d0 = delegate<void>(&t, &Test::call);
+
+			CHECK(d0_other == d0);
+			CHECK_FALSE(d0_other != d0);
+			CHECK_FALSE(d0_other < d0);
+
+			d0 = delegate<void>(&t, &Test::call_const);
+
+			CHECK_FALSE(d0_other == d0);
+			CHECK(d0_other != d0);
+
+			d0_other = delegate<void>(&t, &Test::call_const);
+
+			CHECK(d0_other == d0);
+			CHECK_FALSE(d0_other != d0);
+			CHECK_FALSE(d0_other < d0);
+		}
+
 		func = &tmpl_void_func<float>;
 		d0_other = delegate<void>(func);
 
