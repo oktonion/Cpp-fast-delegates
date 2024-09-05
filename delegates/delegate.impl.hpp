@@ -24,10 +24,16 @@ namespace delegates
         typedef ReturnT(*free_func_like_member_type)(pthis_type DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
         typedef ReturnT(*caller_type)(const delegate& DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
 
-        enum comparison_type {
-            less, equal, greater
-        } ;
+        //template<class Y>
+        //struct type_traits {
+        //    typedef ReturnT(function_type*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
+        //    typedef ReturnT(function_const_type*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
+        //    typedef ReturnT(Y::*member_function_type)(DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
+        //    typedef ReturnT(Y::* member_function_const_type)(DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS) const;
+        //};
 
+
+        typedef detail::comparison_type comparison_type;
         typedef bool(*comparator_type)(const delegate&, const delegate&, comparison_type);
 
         struct member_func_call
@@ -156,19 +162,6 @@ namespace delegates
         caller_type get_caller(ReturnT(*)(DELEGATE_TEMPLATE_ARGS)) const
         { return &simple_function_caller; }
 
-        template<class T>
-        inline 
-        static bool compare(const T &lhs, const T &rhs, comparison_type op)
-        {
-            switch (op)
-            {
-            case less: return std::less<T>()(lhs, rhs);
-            case greater: return std::greater<T>()(lhs, rhs);
-            case equal: return (lhs == rhs);
-            }
-            return false;
-        }
-
         inline
         static bool simple_function_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
         { 
@@ -177,7 +170,7 @@ namespace delegates
             std::memcpy(&lhs_func, &lhs.union_[0], sizeof(lhs_func));
             std::memcpy(&rhs_func, &rhs.union_[0], sizeof(rhs_func));
 
-            return compare(&lhs_func, &rhs_func, op);
+            return detail::compare(lhs_func, rhs_func, op);
         }
 
         template< class Y, class real_free_func_like_member_type >
@@ -189,14 +182,14 @@ namespace delegates
             std::memcpy(&lhs_call, lhs.union_, sizeof(lhs_call));
             std::memcpy(&rhs_call, rhs.union_, sizeof(rhs_call));
 
-            if (!compare(lhs_call.pthis_, rhs_call.pthis_, op))
+            if (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, op))
                 return false;
 
             real_free_func_like_member_type lhs_func, rhs_func;
             std::memcpy(&lhs_func, lhs_call.union_, sizeof(lhs_func));
             std::memcpy(&rhs_func, rhs_call.union_, sizeof(rhs_func));
 
-            return compare(lhs_func, rhs_func, op);
+            return detail::compare(lhs_func, rhs_func, op);
         }
 
         template< class Y, class real_member_func_type >
@@ -208,7 +201,7 @@ namespace delegates
             std::memcpy(&lhs_call, lhs.union_, sizeof(lhs_call));
             std::memcpy(&rhs_call, rhs.union_, sizeof(rhs_call));
 
-            if (!compare(lhs_call.pthis_, rhs_call.pthis_, op))
+            if (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, op))
                 return false;
 
             const int result = 
@@ -216,9 +209,9 @@ namespace delegates
 
             switch (op)
             {
-            case less: return (result < 0);
-            case greater: return (result > 0);
-            case equal: return (0 == result);
+            case detail::less: return (result < 0);
+            case detail::greater: return (result > 0);
+            case detail::equal: return (0 == result);
             }
             return false;
         }
@@ -230,7 +223,7 @@ namespace delegates
             typedef ReturnT(*func_type)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
             return &function_comparator<Y, func_type>;
         }
-
+        
         template<class Y>
         inline
         comparator_type get_comparator(const Y*, ReturnT(*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
@@ -238,7 +231,7 @@ namespace delegates
             typedef ReturnT(*func_type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
             return &function_comparator<Y, func_type>;
         }
-
+        
         template<class X, class Y>
         inline
         comparator_type get_comparator(X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS)) const
@@ -246,7 +239,7 @@ namespace delegates
             typedef ReturnT(Y::*func_type)(DELEGATE_TEMPLATE_ARGS);
             return &mfunction_comparator<X, func_type>;
         }
-
+        
         template<class X, class Y>
         inline
         comparator_type get_comparator(const X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS) const) const
@@ -435,7 +428,7 @@ namespace delegates
         {
             if (this != &other)
             {
-                delegate(other).swap(*this);
+                type(other).swap(*this);
             }
 
             return *this;
@@ -453,7 +446,7 @@ namespace delegates
             if (comparator_ != other.comparator_)
                 return false;
             if(NULL != comparator_)
-                return comparator_(*this, other, equal);
+                return comparator_(*this, other, detail::equal);
             return true;
         }
 
@@ -469,7 +462,7 @@ namespace delegates
             if (comparator_ != other.comparator_)
                 return std::less<comparator_type>()(comparator_, other.comparator_);
             if (NULL != comparator_)
-                return comparator_(*this, other, less);
+                return comparator_(*this, other, detail::less);
             return false;
         }
 
@@ -480,7 +473,7 @@ namespace delegates
             if (comparator_ != other.comparator_)
                 return std::greater<comparator_type>()(comparator_, other.comparator_);
             if (NULL != comparator_)
-                return comparator_(*this, other, greater);
+                return comparator_(*this, other, detail::greater);
             return false;
         }
 

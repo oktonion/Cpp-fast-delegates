@@ -119,6 +119,23 @@ namespace delegates
             float func_child(double) {return 0.f;}
             ~virtual_class_child() {}
         };
+
+        enum comparison_type {
+            less, equal, greater
+        };
+
+        template<class T>
+        inline 
+        bool compare(const T &lhs, const T &rhs, comparison_type op)
+        {
+            switch (op)
+            {
+            case less: return std::less<T>()(lhs, rhs);
+            case greater: return std::greater<T>()(lhs, rhs);
+            case equal: return std::equal_to<T>()(lhs, rhs);
+            }
+            return false;
+        }
     }
 
     template <
