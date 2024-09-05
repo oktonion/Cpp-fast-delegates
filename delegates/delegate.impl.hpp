@@ -39,7 +39,7 @@ namespace delegates
         };
 
         inline
-		static ReturnT simple_function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
+        static ReturnT simple_function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
         { 
             free_func_type func;
 
@@ -50,7 +50,7 @@ namespace delegates
 
         template< class Y, class real_free_func_like_member_type >
         inline
-		static ReturnT function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
+        static ReturnT function_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS)
         { 
             member_func_call call;
 
@@ -68,7 +68,7 @@ namespace delegates
 
         template< class Y, class real_free_func_like_member_type >
         inline
-		static ReturnT function_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
+        static ReturnT function_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
         {
             member_func_call call;
 
@@ -86,7 +86,7 @@ namespace delegates
 
         template< class Y, class real_member_func_type >
         inline
-		static ReturnT mfunction_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
+        static ReturnT mfunction_caller(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
         { 
             member_func_call call;
 
@@ -104,7 +104,7 @@ namespace delegates
 
         template< class Y, class real_member_func_type >
         inline
-		static ReturnT mfunction_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
+        static ReturnT mfunction_caller_const(const delegate &that DELEGATE_COMMA DELEGATE_PARAMS) 
         {
             member_func_call call;
 
@@ -156,21 +156,21 @@ namespace delegates
         caller_type get_caller(ReturnT(*)(DELEGATE_TEMPLATE_ARGS)) const
         { return &simple_function_caller; }
 
-        template<class FuncT>
+        template<class T>
         inline 
-        static bool compare(const FuncT* lhs, const FuncT* rhs, comparison_type op)
+        static bool compare(const T &lhs, const T &rhs, comparison_type op)
         {
             switch (op)
             {
-            case less: return std::less<FuncT>()(*lhs, *rhs);
-            case greater: return std::greater<FuncT>()(*lhs, *rhs);
-            case equal: return (*lhs == *rhs);
+            case less: return std::less<T>()(lhs, rhs);
+            case greater: return std::greater<T>()(lhs, rhs);
+            case equal: return (lhs == rhs);
             }
             return false;
         }
 
         inline
-		static bool simple_function_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
+        static bool simple_function_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
         { 
             free_func_type lhs_func, rhs_func;
 
@@ -182,28 +182,34 @@ namespace delegates
 
         template< class Y, class real_free_func_like_member_type >
         inline
-		static bool function_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
+        static bool function_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
         {
             member_func_call lhs_call, rhs_call;
 
             std::memcpy(&lhs_call, lhs.union_, sizeof(lhs_call));
             std::memcpy(&rhs_call, rhs.union_, sizeof(rhs_call));
+
+            if (!compare(lhs_call.pthis_, rhs_call.pthis_, op))
+                return false;
 
             real_free_func_like_member_type lhs_func, rhs_func;
             std::memcpy(&lhs_func, lhs_call.union_, sizeof(lhs_func));
             std::memcpy(&rhs_func, rhs_call.union_, sizeof(rhs_func));
 
-            return compare(&lhs_func, &rhs_func, op);
+            return compare(lhs_func, rhs_func, op);
         }
 
         template< class Y, class real_member_func_type >
         inline
-		static bool mfunction_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
+        static bool mfunction_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
         {
             member_func_call lhs_call, rhs_call;
 
             std::memcpy(&lhs_call, lhs.union_, sizeof(lhs_call));
             std::memcpy(&rhs_call, rhs.union_, sizeof(rhs_call));
+
+            if (!compare(lhs_call.pthis_, rhs_call.pthis_, op))
+                return false;
 
             const int result = 
                 std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_));
@@ -479,7 +485,7 @@ namespace delegates
         }
 
         inline
-		ReturnT operator()(DELEGATE_PARAMS) const
+        ReturnT operator()(DELEGATE_PARAMS) const
         {
             return caller_(*this DELEGATE_COMMA DELEGATE_ARGS);
         }
@@ -547,7 +553,7 @@ namespace delegates
             sizeof(member_func_call) > sizeof(free_func_type) ? 
                 sizeof(member_func_call) : sizeof(free_func_type)];
     };
-	
+    
     template<DELEGATE_TEMPLATE_PARAMS>
     class delegate<detail::DefaultVoid DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS>
         : delegate<void DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS> {};
