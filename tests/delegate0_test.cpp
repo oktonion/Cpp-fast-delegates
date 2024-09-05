@@ -33,11 +33,13 @@ void tmpl_func_p(T*) {}
 
 template<class T>
 delegates::delegate<void> tmpl1_void_func_delegate() {
-	return &tmpl_void_func<T>;
+	void(*func)(void) = &tmpl_void_func<T>;
+	return func;
 }
 template<class T>
 delegates::delegate<void> tmpl2_void_func_delegate() {
-	return &tmpl_void_func<T>;
+	void(*func)(void) = &tmpl_void_func<T>;
+	return func;
 }
 
 TEST_CASE("Testing cpp delegate 0") {
@@ -131,14 +133,16 @@ TEST_CASE("Testing cpp delegate 0") {
 	{
 		delegate<void> d0;
 		REQUIRE(!d0);
-		d0 = delegate<void>(&tmpl_void_func<int>);
+		void(*func)(void) = &tmpl_void_func<int>;
+		d0 = delegate<void>(func);
 		delegate<void> d0_other = d0;
 
 		CHECK(d0_other == d0);
 		CHECK_FALSE(d0_other != d0);
 		CHECK_FALSE(d0_other < d0);
 
-		d0_other = delegate<void>(&tmpl_void_func<int>);
+		func = &tmpl_void_func<int>;
+		d0_other = delegate<void>(func);
 
 		CHECK(d0_other == d0);
 		CHECK_FALSE(d0_other != d0);
@@ -158,19 +162,22 @@ TEST_CASE("Testing cpp delegate 0") {
 
 		{
 			int a = 0;
-			d0_other = delegate<void>(&a, &tmpl_func_p<int>);
+			void(*func)(int*) = &tmpl_func_p<int>;
+			d0_other = delegate<void>(&a, func);
 
 			CHECK_FALSE(d0_other == d0);
 			CHECK(d0_other != d0);
 
-			d0 = delegate<void>(&a, &tmpl_func_p<int>);
+			func = &tmpl_func_p<int>;
+			d0 = delegate<void>(&a, func);
 
 			CHECK(d0_other == d0);
 			CHECK_FALSE(d0_other != d0);
 			CHECK_FALSE(d0_other < d0);
 		}
 
-		d0_other = delegate<void>(&tmpl_void_func<float>);
+		func = &tmpl_void_func<float>;
+		d0_other = delegate<void>(func);
 
 		CHECK_FALSE(d0_other == d0);
 		CHECK(d0_other != d0);
