@@ -88,6 +88,22 @@ TEST_CASE("Testing cpp delegate 0") {
 		CHECK(true == func_called);
 
 		func_called = false;
+
+		d0.bind(vptr, &void_func_void_p);
+
+		func_called = false;
+		d0();
+		CHECK(true == func_called);
+
+		func_called = false;
+
+		d0 = delegates::bind(vptr, &void_func_void_p);
+
+		func_called = false;
+		d0();
+		CHECK(true == func_called);
+
+		func_called = false;
 	}
 
 	SUBCASE("Delegate 0 class member func invocation")

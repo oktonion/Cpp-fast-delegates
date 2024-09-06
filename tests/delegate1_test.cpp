@@ -56,6 +56,22 @@ struct TestChild
 	}
 };
 
+template<class T>
+void tmpl_int_func(int) {}
+template<class T>
+void tmpl_func_p(T*, int) {}
+
+template<class T>
+delegates::delegate<void, int> tmpl1_int_func_delegate() {
+	void(*func)(int) = &tmpl_int_func<T>;
+	return func;
+}
+template<class T>
+delegates::delegate<void, int> tmpl2_int_func_delegate() {
+	void(*func)(int) = &tmpl_int_func<T>;
+	return func;
+}
+
 TEST_CASE("Testing cpp delegate 1") {
 	
 	using delegates::delegate;
@@ -125,6 +141,20 @@ TEST_CASE("Testing cpp delegate 1") {
 		dd1(42);
 		CHECK(true == func_called);
 
+		d1.bind(&void_func_int);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		func_called = false;
+
+		d1 = delegates::bind(&void_func_int);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
 		func_called = false;
 	}
 
@@ -171,6 +201,30 @@ TEST_CASE("Testing cpp delegate 1") {
 
 		func_called = false;
 		dd1(42);
+		CHECK(true == func_called); 
+		
+		d1.bind(&tt, &Test::call);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		d1 = delegates::bind(&tt, &Test::call);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		d1.bind(&tt, &Test::call_const);
+
+		func_called = false;
+		d1(42);
+		CHECK(true == func_called);
+
+		d1 = delegates::bind(&tt, &Test::call_const);
+
+		func_called = false;
+		d1(42);
 		CHECK(true == func_called);
 
 		func_called = false;
@@ -254,5 +308,84 @@ TEST_CASE("Testing cpp delegate 1") {
 			child_func_called = false;
 		}
 
+	}
+
+	SUBCASE("Delegate 1 comparison")
+	{
+		delegate<void, int> d1;
+		REQUIRE(!d1);
+		void(*func)(int) = &tmpl_int_func<int>;
+		d1 = delegate<void, int>(func);
+		delegate<void, int> d1_other = d1;
+
+		CHECK(d1_other == d1);
+		CHECK_FALSE(d1_other != d1);
+		CHECK_FALSE(d1_other < d1);
+
+		func = &tmpl_int_func<int>;
+		d1_other = delegate<void, int>(func);
+
+		CHECK(d1_other == d1);
+		CHECK_FALSE(d1_other != d1);
+		CHECK_FALSE(d1_other < d1);
+
+		d1_other = delegate<void, int>(tmpl1_int_func_delegate<int>());
+
+		CHECK(d1_other == d1);
+		CHECK_FALSE(d1_other != d1);
+		CHECK_FALSE(d1_other < d1);
+
+		d1 = delegate<void, int>(tmpl2_int_func_delegate<int>());
+
+		CHECK(d1_other == d1);
+		CHECK_FALSE(d1_other != d1);
+		CHECK_FALSE(d1_other < d1);
+
+		{
+			int a = 0;
+			void(*func)(int*, int) = &tmpl_func_p<int>;
+			d1_other = delegate<void, int>(&a, func);
+
+			CHECK_FALSE(d1_other == d1);
+			CHECK(d1_other != d1);
+
+			func = &tmpl_func_p<int>;
+			d1 = delegate<void, int>(&a, func);
+
+			CHECK(d1_other == d1);
+			CHECK_FALSE(d1_other != d1);
+			CHECK_FALSE(d1_other < d1);
+		}
+
+		{
+			Test t;
+			d1_other = delegate<void, int>(&t, &Test::call);
+
+			CHECK_FALSE(d1_other == d1);
+			CHECK(d1_other != d1);
+
+			d1 = delegate<void, int>(&t, &Test::call);
+
+			CHECK(d1_other == d1);
+			CHECK_FALSE(d1_other != d1);
+			CHECK_FALSE(d1_other < d1);
+
+			d1 = delegate<void, int>(&t, &Test::call_const);
+
+			CHECK_FALSE(d1_other == d1);
+			CHECK(d1_other != d1);
+
+			d1_other = delegate<void, int>(&t, &Test::call_const);
+
+			CHECK(d1_other == d1);
+			CHECK_FALSE(d1_other != d1);
+			CHECK_FALSE(d1_other < d1);
+		}
+
+		func = &tmpl_int_func<float>;
+		d1_other = delegate<void, int>(func);
+
+		CHECK_FALSE(d1_other == d1);
+		CHECK(d1_other != d1);
 	}
 }
