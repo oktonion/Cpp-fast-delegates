@@ -24,15 +24,6 @@ namespace delegates
         typedef ReturnT(*free_func_like_member_type)(pthis_type DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
         typedef ReturnT(*caller_type)(const delegate& DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
 
-        //template<class Y>
-        //struct type_traits {
-        //    typedef ReturnT(function_type*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-        //    typedef ReturnT(function_const_type*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-        //    typedef ReturnT(Y::*member_function_type)(DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-        //    typedef ReturnT(Y::* member_function_const_type)(DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS) const;
-        //};
-
-
         typedef detail::comparison_type comparison_type;
         typedef bool(*comparator_type)(const delegate&, const delegate&, comparison_type);
 
@@ -49,7 +40,7 @@ namespace delegates
         { 
             free_func_type func;
 
-            std::memcpy(&func, &that.union_[0], sizeof(func));
+            std::memcpy(&func, that.union_, sizeof(func));
 
             return func(DELEGATE_ARGS);
         }
@@ -167,8 +158,8 @@ namespace delegates
         { 
             free_func_type lhs_func, rhs_func;
 
-            std::memcpy(&lhs_func, &lhs.union_[0], sizeof(lhs_func));
-            std::memcpy(&rhs_func, &rhs.union_[0], sizeof(rhs_func));
+            std::memcpy(&lhs_func, lhs.union_, sizeof(lhs_func));
+            std::memcpy(&rhs_func, rhs.union_, sizeof(rhs_func));
 
             return detail::compare(lhs_func, rhs_func, op);
         }
@@ -259,7 +250,7 @@ namespace delegates
             : caller_(NULL)
             , comparator_(NULL)
         { 
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
         }
 
         template < class X, class Y >
@@ -269,7 +260,7 @@ namespace delegates
             , comparator_(get_comparator(pthis, function_to_bind))
         { 
 
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
 
             typename
             detail::disable_if_not_convertable
@@ -277,9 +268,9 @@ namespace delegates
             
             std::memset(&f_call, 0, sizeof(f_call));
             f_call.pthis_ = pthis;
-            std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
+            std::memcpy(f_call.union_, &function_to_bind, sizeof(function_to_bind));
             
-            std::memcpy(&union_[0], &f_call, sizeof(f_call));
+            std::memcpy(union_, &f_call, sizeof(f_call));
 
             assert(NULL != pthis);
             assert(NULL != function_to_bind);
@@ -291,7 +282,7 @@ namespace delegates
             : caller_(get_caller(pthis, function_to_bind))
             , comparator_(get_comparator(pthis, function_to_bind))
         { 
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
 
             typename
             detail::disable_if_not_convertable
@@ -299,9 +290,9 @@ namespace delegates
             
             std::memset(&f_call, 0, sizeof(f_call));
             f_call.pthis_ = pthis;
-            std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
+            std::memcpy(f_call.union_, &function_to_bind, sizeof(function_to_bind));
 
-            std::memcpy(&union_[0], &f_call, sizeof(f_call));
+            std::memcpy(union_, &f_call, sizeof(f_call));
 
             assert(NULL != pthis);
             assert(NULL != function_to_bind);
@@ -313,15 +304,15 @@ namespace delegates
             : caller_(get_caller(pthis, function_to_bind))
             , comparator_(get_comparator(pthis, function_to_bind))
         {
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
 
             member_func_call f_call;
             
             std::memset(&f_call, 0, sizeof(f_call));
             f_call.pthis_ = pthis;
-            std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
+            std::memcpy(f_call.union_, &function_to_bind, sizeof(function_to_bind));
 
-            std::memcpy(&union_[0], &f_call, sizeof(f_call));
+            std::memcpy(union_, &f_call, sizeof(f_call));
 
             assert(NULL != function_to_bind);
         }
@@ -332,15 +323,15 @@ namespace delegates
             : caller_(get_caller(pthis, function_to_bind))
             , comparator_(get_comparator(pthis, function_to_bind))
         {
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
 
             member_func_call f_call;
             
             std::memset(&f_call, 0, sizeof(f_call));
             f_call.pthis_ = pthis;
-            std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
+            std::memcpy(f_call.union_, &function_to_bind, sizeof(function_to_bind));
 
-            std::memcpy(&union_[0], &f_call, sizeof(f_call));
+            std::memcpy(union_, &f_call, sizeof(f_call));
 
             assert(NULL != function_to_bind);
         }
@@ -351,15 +342,15 @@ namespace delegates
             : caller_(get_caller(pthis, function_to_bind))
             , comparator_(get_comparator(pthis, function_to_bind))
         {
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
 
             member_func_call f_call;
             
             std::memset(&f_call, 0, sizeof(f_call));
             f_call.pthis_ = pthis;
-            std::memcpy(&f_call.union_[0], &function_to_bind, sizeof(function_to_bind));
+            std::memcpy(f_call.union_, &function_to_bind, sizeof(function_to_bind));
 
-            std::memcpy(&union_[0], &f_call, sizeof(f_call));
+            std::memcpy(union_, &f_call, sizeof(f_call));
 
             assert(NULL != function_to_bind);
         }
@@ -369,9 +360,9 @@ namespace delegates
             : caller_(get_caller(function_to_bind))
             , comparator_(get_comparator(function_to_bind))
         {
-            std::memset(&union_[0], 0, sizeof(union_));
+            std::memset(union_, 0, sizeof(union_));
 
-            std::memcpy(&union_[0], &function_to_bind, sizeof(function_to_bind));
+            std::memcpy(union_, &function_to_bind, sizeof(function_to_bind));
 
             assert(NULL != function_to_bind);
         }
@@ -398,9 +389,9 @@ namespace delegates
                 // swap for arrays
                 {
                     unsigned char tmp[sizeof(union_)];
-                    std::memcpy(&tmp[0], &union_[0], sizeof(union_));
-                    std::memcpy(&union_[0], &other.union_[0], sizeof(union_));
-                    std::memcpy(&other.union_[0], &tmp[0], sizeof(union_));
+                    std::memcpy(tmp, union_, sizeof(union_));
+                    std::memcpy(union_, other.union_, sizeof(union_));
+                    std::memcpy(other.union_, tmp, sizeof(union_));
                 }
             }
             
@@ -413,14 +404,17 @@ namespace delegates
 
         delegate(const delegate &other)
         { 
-            if (this == &other)
-                return;
-
-            if (caller_ || other.caller_)
+            if (other.caller_)
             {
                 caller_ = (other.caller_);
                 comparator_ = (other.comparator_);
-                std::memcpy(&union_[0], &other.union_[0], sizeof(union_));
+                std::memcpy(union_, other.union_, sizeof(union_));
+            }
+            else
+            {
+                caller_ = NULL;
+                comparator_ = NULL;
+                std::memset(union_, 0, sizeof(union_));
             }
         }
 
@@ -436,14 +430,14 @@ namespace delegates
 
         bool operator!() const
         {
-            return caller_ == NULL;
+            return NULL == caller_;
         }
 
         bool operator==(const delegate &other) const 
         {
-            if(caller_ != other.caller_)
+            if (!detail::compare_equal(caller_, other.caller_))
                 return false;
-            if (comparator_ != other.comparator_)
+            if (!detail::compare_equal(comparator_, other.comparator_))
                 return false;
             if(NULL != comparator_)
                 return comparator_(*this, other, detail::equal);
@@ -457,10 +451,10 @@ namespace delegates
 
         bool operator<(const delegate &other) const 
         {
-            if(caller_ != other.caller_)
-                return std::less<caller_type>()(caller_, other.caller_);
-            if (comparator_ != other.comparator_)
-                return std::less<comparator_type>()(comparator_, other.comparator_);
+            if (!detail::compare_equal(caller_, other.caller_))
+                return detail::compare_less(caller_, other.caller_);
+            if (!detail::compare_equal(comparator_, other.comparator_))
+                return detail::compare_less(comparator_, other.comparator_);
             if (NULL != comparator_)
                 return comparator_(*this, other, detail::less);
             return false;
@@ -468,10 +462,10 @@ namespace delegates
 
         bool operator>(const delegate &other) const 
         {
-            if (caller_ != other.caller_)
-                return std::greater<caller_type>()(caller_, other.caller_);
-            if (comparator_ != other.comparator_)
-                return std::greater<comparator_type>()(comparator_, other.comparator_);
+            if (!detail::compare_equal(caller_, other.caller_))
+                return detail::compare_greater(caller_, other.caller_);
+            if (!detail::compare_equal(comparator_, other.comparator_))
+                return detail::compare_greater(comparator_, other.comparator_);
             if (NULL != comparator_)
                 return comparator_(*this, other, detail::greater);
             return false;
@@ -487,44 +481,38 @@ namespace delegates
         {
             member_func_call call;
 
-            std::memcpy(&call, &union_[0], sizeof(call));
+            std::memcpy(&call, union_, sizeof(call));
 
             return (call.pthis_);
         }
 
         template < class Y >
         inline void bind(Y *pthis, ReturnT(*function_to_bind)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) {
-            delegate tmp(pthis, function_to_bind);
-            swap(tmp);
+            type(pthis, function_to_bind).swap(*this);
         }
 
         template < class Y >
         inline void bind(Y *pthis, ReturnT(*function_to_bind)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) {
-            delegate tmp(pthis, function_to_bind);
-            swap(tmp);
+            type(pthis, function_to_bind).swap(*this);
         }
 
         template < class Y >
         inline void bind(const Y *pthis, ReturnT(*function_to_bind)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) {
-            delegate tmp(pthis, function_to_bind);
-            swap(tmp);
+            type(pthis, function_to_bind).swap(*this);
         }
 
         template < class X, class Y >
         inline void bind(Y *pthis, ReturnT(X::* function_to_bind)(DELEGATE_TEMPLATE_ARGS)) {
-            delegate tmp(pthis, function_to_bind);
-            swap(tmp);
+            type(pthis, function_to_bind).swap(*this);
         }
 
         template < class X, class Y >
         inline void bind(const Y *pthis, ReturnT(X::* function_to_bind)(DELEGATE_TEMPLATE_ARGS) const) {
-            delegate tmp(pthis, function_to_bind);
-            swap(tmp);
+            type(pthis, function_to_bind).swap(*this);
         }
 
         inline void bind(ReturnT(*function_to_bind)(DELEGATE_TEMPLATE_ARGS)) {
-            delegate tmp(function_to_bind);
-            swap(tmp);
+            type(function_to_bind).swap(*this);
         }
 
     private:

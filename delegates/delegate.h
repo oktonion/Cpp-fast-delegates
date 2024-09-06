@@ -130,12 +130,27 @@ namespace delegates
         {
             switch (op)
             {
+            case equal: return std::equal_to<T>()(lhs, rhs);
             case less: return std::less<T>()(lhs, rhs);
             case greater: return std::greater<T>()(lhs, rhs);
-            case equal: return std::equal_to<T>()(lhs, rhs);
             }
             return false;
         }
+
+        template<class T>
+        inline 
+        bool compare_less(const T &lhs, const T &rhs)
+        { return std::less<T>()(lhs, rhs); }
+        
+        template<class T>
+        inline 
+        bool compare_greater(const T &lhs, const T &rhs)
+        { return std::greater<T>()(lhs, rhs); }
+        
+        template<class T>
+        inline 
+        bool compare_equal(const T &lhs, const T &rhs)
+        { return std::equal_to<T>()(lhs, rhs); }
     }
 
     template <
