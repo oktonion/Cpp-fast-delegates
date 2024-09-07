@@ -130,7 +130,7 @@ jobs:
             BUILD_SCRIPT: ~build_tests.bat
             RUN_SCRIPT: run_tests.bat
             SETUP_SCRIPT: |
-              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
               echo %MSVS_VSVARS_PATH%
               if exist %MSVS_VSVARS_PATH% (
                 echo call %MSVS_VSVARS_PATH% > ~build_tests.bat
@@ -149,7 +149,7 @@ jobs:
             BUILD_SCRIPT: ~build_tests.bat
             RUN_SCRIPT: run_tests.bat
             SETUP_SCRIPT: |
-              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
+              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars32.bat"
               echo %MSVS_VSVARS_PATH%
               if exist %MSVS_VSVARS_PATH% (
                 echo call %MSVS_VSVARS_PATH% > ~build_tests.bat
@@ -169,7 +169,7 @@ jobs:
             BUILD_SCRIPT: ~build_tests.bat
             RUN_SCRIPT: run_tests.bat
             SETUP_SCRIPT: |
-              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
               echo %MSVS_VSVARS_PATH%
               if exist %MSVS_VSVARS_PATH% (
                 echo call %MSVS_VSVARS_PATH% > ~build_tests.bat
@@ -188,7 +188,7 @@ jobs:
             BUILD_SCRIPT: ~build_tests.bat
             RUN_SCRIPT: run_tests.bat
             SETUP_SCRIPT: |
-              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
+              set MSVS_VSVARS_PATH="C:\PROGRA~2\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
               echo %MSVS_VSVARS_PATH%
               if exist %MSVS_VSVARS_PATH% (
                 echo call %MSVS_VSVARS_PATH% > ~build_tests.bat
