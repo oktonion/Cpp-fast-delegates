@@ -138,6 +138,10 @@ jobs:
                 cat build_tests.bat >> ~build_tests.bat
               ) else (
                 echo "cannot find %MSVS_VSVARS_PATH%"
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+                dir
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\"
+                dir
                 exit /B 1
               )
 
@@ -159,6 +163,10 @@ jobs:
                 cat build_tests.bat >> ~build_tests.bat
               ) else (
                 echo "cannot find %MSVS_VSVARS_PATH%"
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+                dir
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\"
+                dir
                 exit /B 1
               )
 
@@ -179,6 +187,10 @@ jobs:
                 cat build_tests.bat >> ~build_tests.bat
               ) else (
                 echo "cannot find %MSVS_VSVARS_PATH%"
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+                dir
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\"
+                dir
                 exit /B 1
               )
 
@@ -200,6 +212,10 @@ jobs:
                 cat build_tests.bat >> ~build_tests.bat
               ) else (
                 echo "cannot find %MSVS_VSVARS_PATH%"
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+                dir
+                cd "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\"
+                dir
                 exit /B 1
               )
               
