@@ -173,14 +173,46 @@ namespace delegates
             std::memcpy(&lhs_call, lhs.union_, sizeof(lhs_call));
             std::memcpy(&rhs_call, rhs.union_, sizeof(rhs_call));
 
-            if (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, op))
-                return false;
+            switch (op)
+            {
+            case detail::less:
+                if (detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::less))
+                {
+                    return true;
+                }
+                else if (!detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::less))
+                {
+                    real_free_func_like_member_type lhs_func, rhs_func;
+                    std::memcpy(&lhs_func, lhs_call.union_, sizeof(lhs_func));
+                    std::memcpy(&rhs_func, rhs_call.union_, sizeof(rhs_func));
+                    return
+                        detail::compare(lhs_func, rhs_func, detail::less);
+                }break;
+            case detail::greater:
+                if (detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::less))
+                {
+                    return true;
+                }
+                else if (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::less))
+                {
+                    real_free_func_like_member_type lhs_func, rhs_func;
+                    std::memcpy(&lhs_func, lhs_call.union_, sizeof(lhs_func));
+                    std::memcpy(&rhs_func, rhs_call.union_, sizeof(rhs_func));
+                    return
+                        detail::compare(rhs_func, lhs_func, detail::less);
+                }break;
+            case detail::equal:
+                if (detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::equal))
+                {
+                    real_free_func_like_member_type lhs_func, rhs_func;
+                    std::memcpy(&lhs_func, lhs_call.union_, sizeof(lhs_func));
+                    std::memcpy(&rhs_func, rhs_call.union_, sizeof(rhs_func));
+                    return
+                        detail::compare(lhs_func, rhs_func, detail::equal);
+                }break;
+            }
 
-            real_free_func_like_member_type lhs_func, rhs_func;
-            std::memcpy(&lhs_func, lhs_call.union_, sizeof(lhs_func));
-            std::memcpy(&rhs_func, rhs_call.union_, sizeof(rhs_func));
-
-            return detail::compare(lhs_func, rhs_func, op);
+            return false;
         }
 
         template< class Y, class real_free_func_like_member_type >
@@ -199,17 +231,19 @@ namespace delegates
             std::memcpy(&lhs_call, lhs.union_, sizeof(lhs_call));
             std::memcpy(&rhs_call, rhs.union_, sizeof(rhs_call));
 
-            if (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, op))
-                return false;
-
-            const int result = 
-                std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_));
-
             switch (op)
             {
-            case detail::less: return (result < 0);
-            case detail::greater: return (result > 0);
-            case detail::equal: return (0 == result);
+            case detail::less: 
+                return detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::less) ||
+                    (!detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::less) &&
+                    std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_) < 0)); break;
+            case detail::greater:
+                return detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::less) ||
+                    (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::less) &&
+                        std::memcmp(rhs_call.union_, lhs_call.union_, sizeof(lhs_call.union_) < 0)); break;
+            case detail::equal: 
+                return detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::equal) &&
+                    (0 == std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_))); break;
             }
             return false;
         }
