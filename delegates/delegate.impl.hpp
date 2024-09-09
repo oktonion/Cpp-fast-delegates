@@ -183,6 +183,13 @@ namespace delegates
             return detail::compare(lhs_func, rhs_func, op);
         }
 
+        template< class Y, class real_free_func_like_member_type >
+        inline
+        static bool function_comparator_const(const delegate& lhs, const delegate& rhs, comparison_type op)
+        {
+            return function_comparator<Y, real_free_func_like_member_type>(lhs, rhs, op);
+        }
+
         template< class Y, class real_member_func_type >
         inline
         static bool mfunction_comparator(const delegate& lhs, const delegate& rhs, comparison_type op)
@@ -207,6 +214,13 @@ namespace delegates
             return false;
         }
 
+        template< class Y, class real_member_func_type >
+        inline
+        static bool mfunction_comparator_const(const delegate& lhs, const delegate& rhs, comparison_type op)
+        {
+            return mfunction_comparator<Y, real_member_func_type>(lhs, rhs, op);
+        }
+
         template<class Y>
         inline
         comparator_type get_comparator(Y*, ReturnT(*)(Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
@@ -220,7 +234,7 @@ namespace delegates
         comparator_type get_comparator(const Y*, ReturnT(*)(const Y* DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS)) const
         { 
             typedef ReturnT(*func_type)(const Y * DELEGATE_COMMA DELEGATE_TEMPLATE_ARGS);
-            return &function_comparator<Y, func_type>;
+            return &function_comparator_const<Y, func_type>;
         }
         
         template<class X, class Y>
@@ -236,7 +250,7 @@ namespace delegates
         comparator_type get_comparator(const X*, ReturnT(Y::*)(DELEGATE_TEMPLATE_ARGS) const) const
         { 
             typedef ReturnT(Y::* func_type)(DELEGATE_TEMPLATE_ARGS) const;
-            return &mfunction_comparator<X, func_type>;
+            return &mfunction_comparator_const<X, func_type>;
         }
 
         inline
