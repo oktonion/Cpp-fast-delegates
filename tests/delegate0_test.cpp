@@ -24,6 +24,10 @@ struct Test
 	{
 		func_called = true;
 	}
+	void call2()
+	{
+		func_called = true;
+	}
 };
 
 template<class T>
@@ -183,6 +187,9 @@ TEST_CASE("Testing cpp delegate 0") {
 
 			CHECK_FALSE(d0_other == d0);
 			CHECK(d0_other != d0);
+			CHECK((d0_other < d0) != (d0_other > d0));
+			CHECK((d0_other < d0) == (d0 > d0_other));
+			CHECK((d0_other > d0) == (d0 < d0_other));
 
 			func = &tmpl_func_p<int>;
 			d0 = delegate<void>(&a, func);
@@ -190,6 +197,7 @@ TEST_CASE("Testing cpp delegate 0") {
 			CHECK(d0_other == d0);
 			CHECK_FALSE(d0_other != d0);
 			CHECK_FALSE(d0_other < d0);
+			CHECK(((d0_other < d0) == (d0_other > d0)));
 		}
 
 		{
@@ -198,23 +206,49 @@ TEST_CASE("Testing cpp delegate 0") {
 
 			CHECK_FALSE(d0_other == d0);
 			CHECK(d0_other != d0);
+			CHECK((d0_other < d0) != (d0_other > d0));
+			CHECK((d0_other < d0) == (d0 > d0_other));
+			CHECK((d0_other > d0) == (d0 < d0_other));
 
 			d0 = delegate<void>(&t, &Test::call);
 
 			CHECK(d0_other == d0);
 			CHECK_FALSE(d0_other != d0);
 			CHECK_FALSE(d0_other < d0);
+			CHECK(((d0_other < d0) == (d0_other > d0)));
 
 			d0 = delegate<void>(&t, &Test::call_const);
 
 			CHECK_FALSE(d0_other == d0);
 			CHECK(d0_other != d0);
+			CHECK((d0_other < d0) != (d0_other > d0));
+			CHECK((d0_other < d0) == (d0 > d0_other));
+			CHECK((d0_other > d0) == (d0 < d0_other));
 
 			d0_other = delegate<void>(&t, &Test::call_const);
 
 			CHECK(d0_other == d0);
 			CHECK_FALSE(d0_other != d0);
 			CHECK_FALSE(d0_other < d0);
+			CHECK((d0_other < d0) == (d0_other > d0));
+
+			d0 = delegate<void>(&t, &Test::call2);
+
+			CHECK_FALSE(d0_other == d0);
+			CHECK(d0_other != d0);
+			CHECK(((d0_other < d0) != (d0_other > d0)));
+			CHECK((d0_other < d0) == (d0 > d0_other));
+			CHECK((d0_other > d0) == (d0 < d0_other));
+
+			d0_other = delegate<void>(&t, &Test::call);
+
+			CHECK_FALSE(d0_other == d0);
+			CHECK(d0_other != d0);
+			CHECK((d0_other < d0) != (d0_other > d0));
+			CHECK((d0_other < d0) == (d0 > d0_other));
+			CHECK((d0_other > d0) == (d0 < d0_other));
+			CHECK((d0_other > d0) != (d0 > d0_other));
+			CHECK((d0_other > d0) == !(d0_other < d0));
 		}
 
 		func = &tmpl_void_func<float>;
