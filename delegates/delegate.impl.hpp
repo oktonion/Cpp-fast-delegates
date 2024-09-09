@@ -236,11 +236,11 @@ namespace delegates
             case detail::less: 
                 return detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::less) ||
                     (!detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::less) &&
-                    std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_) < 0)); break;
+                    std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_)) < 0); break;
             case detail::greater:
                 return detail::compare(rhs_call.pthis_, lhs_call.pthis_, detail::less) ||
                     (!detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::less) &&
-                        std::memcmp(rhs_call.union_, lhs_call.union_, sizeof(lhs_call.union_) < 0)); break;
+                        std::memcmp(rhs_call.union_, lhs_call.union_, sizeof(lhs_call.union_)) < 0); break;
             case detail::equal: 
                 return detail::compare(lhs_call.pthis_, rhs_call.pthis_, detail::equal) &&
                     (0 == std::memcmp(lhs_call.union_, rhs_call.union_, sizeof(lhs_call.union_))); break;
