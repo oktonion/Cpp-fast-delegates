@@ -515,7 +515,7 @@ namespace delegates
             if (!detail::compare_equal(comparator_, other.comparator_))
                 return detail::compare_greater(comparator_, other.comparator_);
             if (NULL != comparator_)
-                return comparator_(*this, other, detail::less);
+                return comparator_(*this, other, detail::greater);
             return false;
         }
 
