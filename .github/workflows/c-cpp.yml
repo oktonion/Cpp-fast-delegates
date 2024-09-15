@@ -53,8 +53,8 @@ jobs:
               chmod a+rwx ./build_tests.sh
               chmod a+rwx ./run_tests.sh
 
-          - os: ubuntu-18.04
-            name: Ubuntu 18.04 g++3.4
+          - os: ubuntu-20.04
+            name: Ubuntu 20.04 g++3.4
             COMPILER: gcc
             LINKER: gcc
             CPP_COMPILER: g++-3.4
@@ -76,8 +76,8 @@ jobs:
               chmod a+rwx ./build_tests.sh
               chmod a+rwx ./run_tests.sh
 
-          - os: ubuntu-18.04
-            name: Ubuntu 18.04 g++4.4
+          - os: ubuntu-20.04
+            name: Ubuntu 20.04 g++4.4
             COMPILER: gcc
             LINKER: gcc
             CPP_COMPILER: g++-4.4
