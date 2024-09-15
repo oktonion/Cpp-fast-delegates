@@ -510,13 +510,7 @@ namespace delegates
 
         bool operator>(const delegate &other) const 
         {
-            if (!detail::compare_equal(caller_, other.caller_))
-                return detail::compare_greater(caller_, other.caller_);
-            if (!detail::compare_equal(comparator_, other.comparator_))
-                return detail::compare_greater(comparator_, other.comparator_);
-            if (NULL != comparator_)
-                return comparator_(*this, other, detail::greater);
-            return false;
+            return other < *this;
         }
 
         inline
