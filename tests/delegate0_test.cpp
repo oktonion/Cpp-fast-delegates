@@ -244,9 +244,9 @@ TEST_CASE("Testing cpp delegate 0") {
 
 			void(Test::*Test_call)() = &Test::call;
 			void(Test::*Test_call2)() = &Test::call2;
-			REQURE_FALSE(Test_call == Test_call2);
-			REQURE(sizeof(Test_call2) == sizeof(Test_call));
-			REQURE(std::memcmp(&Test_call,  &Test_call2, sizeof(Test_call2)) != 0);
+			REQUIRE_FALSE(Test_call == Test_call2);
+			REQUIRE(sizeof(Test_call2) == sizeof(Test_call));
+			REQUIRE(std::memcmp(&Test_call,  &Test_call2, sizeof(Test_call2)) != 0);
 
 			CHECK_FALSE(d0_other == d0);
 			CHECK_FALSE(d0 == d0_other);
