@@ -420,28 +420,25 @@ namespace delegates
             if (this == &other)
                 return;
 
+            // swap for caller
             {
-                // swap for caller
-                {
-                    caller_type tmp = caller_;
-                    caller_ = other.caller_;
-                    other.caller_ = tmp;
-                }                
-                // swap for comparator
-                {
-                    comparator_type tmp = comparator_;
-                    comparator_ = other.comparator_;
-                    other.comparator_ = tmp;
-                }
-                // swap for arrays
-                {
-                    unsigned char tmp[sizeof(union_)];
-                    std::memcpy(tmp, union_, sizeof(union_));
-                    std::memcpy(union_, other.union_, sizeof(union_));
-                    std::memcpy(other.union_, tmp, sizeof(union_));
-                }
+                caller_type tmp = caller_;
+                caller_ = other.caller_;
+                other.caller_ = tmp;
+            }                
+            // swap for comparator
+            {
+                comparator_type tmp = comparator_;
+                comparator_ = other.comparator_;
+                other.comparator_ = tmp;
             }
-            
+            // swap for arrays
+            {
+                unsigned char tmp[sizeof(union_)];
+                std::memcpy(tmp, union_, sizeof(union_));
+                std::memcpy(union_, other.union_, sizeof(union_));
+                std::memcpy(other.union_, tmp, sizeof(union_));
+            }
         }
 
         friend void swap(delegate& lhs, delegate& rhs)
@@ -451,18 +448,9 @@ namespace delegates
 
         delegate(const delegate &other)
         { 
-            if (other.caller_)
-            {
-                caller_ = (other.caller_);
-                comparator_ = (other.comparator_);
-                std::memcpy(union_, other.union_, sizeof(union_));
-            }
-            else
-            {
-                caller_ = NULL;
-                comparator_ = NULL;
-                std::memset(union_, 0, sizeof(union_));
-            }
+            caller_ = (other.caller_);
+            comparator_ = (other.comparator_);
+            std::memcpy(union_, other.union_, sizeof(union_));
         }
 
         delegate& operator=(const delegate &other)
@@ -477,7 +465,7 @@ namespace delegates
 
         bool operator!() const
         {
-            return NULL == caller_;
+            return NULL == caller_ || NULL == comparator_;
         }
 
         bool operator==(const delegate &other) const 
