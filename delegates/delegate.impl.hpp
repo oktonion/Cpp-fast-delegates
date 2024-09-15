@@ -420,7 +420,6 @@ namespace delegates
             if (this == &other)
                 return;
 
-            if (caller_ || other.caller_)
             {
                 // swap for caller
                 {
