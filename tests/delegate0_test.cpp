@@ -243,7 +243,9 @@ TEST_CASE("Testing cpp delegate 0") {
 			d0_other = delegate<void>(&t, &Test::call);
 
 			CHECK_FALSE(d0_other == d0);
+			CHECK_FALSE(d0 == d0_other);
 			CHECK(d0_other != d0);
+			CHECK(d0 != d0_other);
 			CHECK((d0_other < d0) != (d0_other > d0));
 			CHECK((d0_other < d0) == (d0 > d0_other));
 			CHECK((d0_other > d0) == (d0 < d0_other));
