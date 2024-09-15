@@ -26,7 +26,7 @@ struct Test
 	}
 	void call2()
 	{
-		func_called = true;
+		func_called = !func_called;
 	}
 };
 
