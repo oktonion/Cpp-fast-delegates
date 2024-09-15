@@ -242,6 +242,8 @@ TEST_CASE("Testing cpp delegate 0") {
 
 			d0_other = delegate<void>(&t, &Test::call);
 
+
+			REQUIRE_FALSE(&Test::call == &Test::call2);
 			void(Test::*Test_call)() = &Test::call;
 			void(Test::*Test_call2)() = &Test::call2;
 			REQUIRE_FALSE(Test_call == Test_call2);
