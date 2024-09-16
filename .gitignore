@@ -96,14 +96,16 @@ src/.vscode/launch.json
 # cppcheck files
 *.a1
 *.cppcheck
-PhWidgets-cppcheck-build-dir/*
 
 # tests binaries
 /tests/bin/*
 
+# cmake generated files
+*out/*
+*build/*
+
 # fuse
 *.fuse_*
-CppProperties.json
 
 
 cvs
@@ -124,3 +126,6 @@ obj/
 ipch/
 
 *.obj
+*.log
+out/build/x64-Debug/.cmake/api/v1/query/client-MicrosoftVS/query.json
+CMakeSettings.json
