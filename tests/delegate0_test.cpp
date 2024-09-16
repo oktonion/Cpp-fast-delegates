@@ -21,8 +21,11 @@ struct Test
 	}
 
 	void call_const() const
-	{
-		func_called = true;
+	{ // to remove some optimizations done by MSVC compiler we write code 'func_called = true;' as following mess:
+		if (func_called)
+			func_called = func_called;
+		else
+			func_called = true;
 	}
 	void call2()
 	{
