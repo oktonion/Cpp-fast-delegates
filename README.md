@@ -1,7 +1,6 @@
 # fast delegates for C++
 
-Extended fast delegates (used Don Clugston original delegates).
-
+Extended fast delegates.
 [![C/C++ CI](https://github.com/oktonion/Cpp-fast-delegates/actions/workflows/c-cpp.yml/badge.svg?branch=tests)](https://github.com/oktonion/Cpp-fast-delegates/actions/workflows/c-cpp.yml)
 [![codecov](https://codecov.io/gh/oktonion/Cpp-fast-delegates/branch/tests/graph/badge.svg)](https://codecov.io/gh/oktonion/Cpp-fast-delegates)
 
