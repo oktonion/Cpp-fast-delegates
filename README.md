@@ -1,6 +1,6 @@
 # fast delegates for C++
 
-Extended original fast delegates for C++ (C++98 compatible). 
+Extended original cross platform fast delegates for C++ (C++98 compatible). 
 
 [![C/C++ CI](https://github.com/oktonion/Cpp-fast-delegates/actions/workflows/c-cpp.yml/badge.svg?branch=tests)](https://github.com/oktonion/Cpp-fast-delegates/actions/workflows/c-cpp.yml)
 [![codecov](https://codecov.io/gh/oktonion/Cpp-fast-delegates/branch/tests/graph/badge.svg)](https://codecov.io/gh/oktonion/Cpp-fast-delegates)
